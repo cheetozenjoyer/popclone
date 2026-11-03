@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.app.ActivityManager;
 import android.app.Application;
@@ -131,7 +131,7 @@ public class Instances {
         }
     }
 
-    // "dev.illclone:p3" -> 3, anything else -> -1
+    // "dev.popclone:p3" -> 3, anything else -> -1
     private static int slotOf(Context ctx, String processName) {
         String prefix = ctx.getPackageName() + ":p";
         if (!processName.startsWith(prefix)) return -1;
@@ -159,7 +159,7 @@ public class Instances {
         }
     }
 
-    // which slot this process is, -1 in the main app. stub processes are named dev.illclone:p<slot>
+    // which slot this process is, -1 in the main app. stub processes are named dev.popclone:p<slot>
     public static int currentSlot() {
         String name = Application.getProcessName();
         int at = name.lastIndexOf(":p");

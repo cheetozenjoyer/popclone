@@ -3,7 +3,7 @@ import re
 
 COUNT = 120
 
-java = '''package dev.illclone;
+java = '''package dev.popclone;
 
 import android.app.Activity;
 import android.app.Service;
@@ -42,7 +42,7 @@ for i in range(COUNT):
     java += f'    public static class S{i} extends BaseService {{ }}\n'
     java += f'    public static class P{i} extends BaseProvider {{ }}\n'
 java += '}\n'
-open('app/src/main/java/dev/illclone/Stubs.java', 'w').write(java)
+open('app/src/main/java/dev/popclone/Stubs.java', 'w').write(java)
 
 xml = ''
 for i in range(COUNT):
@@ -50,12 +50,12 @@ for i in range(COUNT):
     xml += f'''        <activity
             android:name=".Stubs$A{i}"
             android:process=":p{i}"
-            android:taskAffinity="dev.illclone.slot{i}"
+            android:taskAffinity="dev.popclone.slot{i}"
             android:exported="false" />
         <service android:name=".Stubs$S{i}" android:process=":p{i}" android:exported="false" />
         <provider
             android:name=".Stubs$P{i}"
-            android:authorities="dev.illclone.stub.p{i}"
+            android:authorities="dev.popclone.stub.p{i}"
             android:process=":p{i}"
             android:exported="false" />
 '''

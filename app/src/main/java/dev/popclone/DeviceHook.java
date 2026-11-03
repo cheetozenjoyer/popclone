@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -43,7 +43,7 @@ public class DeviceHook {
             Object fake = ssid.getMethod("createFromAsciiEncoded", String.class).invoke(null, d.wifiSsid);
             Reflect.field(result.getClass(), "mWifiSsid").set(result, fake);
         } catch (Exception e) {
-            Log.w("illclone", "cant fake wifi info: " + e);
+            Log.w("popclone", "cant fake wifi info: " + e);
         }
         return result;
     }
@@ -72,7 +72,7 @@ public class DeviceHook {
         try {
             Reflect.field(Build.class, "SERIAL").set(null, d.serial);
         } catch (Exception e) {
-            Log.w("illclone", "cant set Build.SERIAL: " + e);
+            Log.w("popclone", "cant set Build.SERIAL: " + e);
         }
     }
 }

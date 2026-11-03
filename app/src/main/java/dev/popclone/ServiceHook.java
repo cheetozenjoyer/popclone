@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.os.IBinder;
 import android.os.IInterface;
@@ -47,14 +47,14 @@ public class ServiceHook {
         try {
             hookInputMethod();
         } catch (Throwable th) {
-            Log.w("illclone", "skipped input method: " + th);
+            Log.w("popclone", "skipped input method: " + th);
         }
 
         for (String[] service : SERVICES) {
             try {
                 hookByName(service[0], service[1]);
             } catch (Throwable t) {
-                Log.w("illclone", "skipped service " + service[0] + ": " + t);
+                Log.w("popclone", "skipped service " + service[0] + ": " + t);
             }
         }
     }

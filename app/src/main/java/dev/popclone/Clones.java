@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.app.Application;
 import android.content.ComponentName;
@@ -42,7 +42,7 @@ public class Clones {
         try {
             Reflect.field(ApplicationInfo.class, name).set(app, value);
         } catch (Exception e) {
-            Log.e("illclone", "cant set " + name, e);
+            Log.e("popclone", "cant set " + name, e);
         }
     }
 
@@ -80,7 +80,7 @@ public class Clones {
             app.splitSourceDirs = original.splitSourceDirs;
             app.splitPublicSourceDirs = original.splitPublicSourceDirs;
             setField(app, "splitNames", pm.getPackageInfo(pkg, 0).splitNames);
-            Log.i("illclone", "using installed apk for " + pkg);
+            Log.i("popclone", "using installed apk for " + pkg);
         } catch (Exception e) {
             // not installed, keep our copy
         }

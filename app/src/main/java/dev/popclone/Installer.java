@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

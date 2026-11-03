@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.app.Application;
 import android.content.Context;
@@ -16,7 +16,7 @@ public class App extends Application {
 
     // logs how many ms since this process started, to see where startup time goes
     public static void mark(String what) {
-        Log.i("illclone", "t+" + (SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime()) + "ms " + what);
+        Log.i("popclone", "t+" + (SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime()) + "ms " + what);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class App extends Application {
             try {
                 WebView.setDataDirectorySuffix("slot" + slot);
             } catch (Exception e) {
-                Log.w("illclone", "webview suffix failed: " + e);
+                Log.w("popclone", "webview suffix failed: " + e);
             }
         }
 
@@ -46,7 +46,7 @@ public class App extends Application {
             LaunchHook.install();
             ServiceHook.install();
         } catch (Exception e) {
-            Log.e("illclone", "hook failed", e);
+            Log.e("popclone", "hook failed", e);
         }
         mark("hooks installed");
     }

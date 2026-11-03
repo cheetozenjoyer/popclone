@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,13 +12,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-// wraps the system activity manager so startActivity for a cloned app goes to a stub instead.
-// the real intent rides along in an extra and LaunchHook swaps it back in the stub process.
+// hook used to swap a clone's real screen for a stub declared in the manifest.
+// the real intent rides along in an extra, LaunchHook swaps it back.
 public class ActivityHook {
 
-    public static final String KEY = "illclone.target";
-    public static final String EXTRA_SLOT = "illclone.slot";
-    private static final String TAG = "illclone";
+    public static final String KEY = "popclone.target";
+    public static final String EXTRA_SLOT = "popclone.slot";
+    private static final String TAG = "popclone";
 
     public static void install() throws Exception {
         // android 10+ split the activity manager in two, both need the hook
@@ -156,7 +156,7 @@ public class ActivityHook {
         if (slot < 0) return null;
 
         Intent stub = new Intent();
-        stub.setComponent(new ComponentName(host.getPackageName(), "dev.illclone.Stubs$A" + slot));
+        stub.setComponent(new ComponentName(host.getPackageName(), "dev.popclone.Stubs$A" + slot));
         stub.setFlags(real.getFlags());
         stub.putExtra(KEY, real);
         Log.i(TAG, "start " + target.flattenToShortString() + " in stub " + slot);

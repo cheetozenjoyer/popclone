@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.app.Activity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -16,7 +16,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-// the whole ui: a list of clones and a + button to add one
 public class MainActivity extends Activity {
 
     private ListView list;
@@ -24,8 +23,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // pick the theme first. no saved choice yet means follow the system.
-        setTheme(isDark() ? R.style.Theme_Illclone_Dark : R.style.Theme_Illclone);
+        // follow the system theme by default
+        setTheme(isDark() ? R.style.Theme_Popclone_Dark : R.style.Theme_Popclone);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -38,7 +37,11 @@ public class MainActivity extends Activity {
 
         list = findViewById(R.id.clones);
         list.setEmptyView(findViewById(R.id.empty));
+
+        // click -> launch 
         list.setOnItemClickListener((parent, view, position, id) -> launch(clones.get(position)));
+        
+        // hold -> delete. there must be better design for this
         list.setOnItemLongClickListener((parent, view, position, id) -> {
             confirmDelete(clones.get(position));
             return true;

@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,11 +11,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-// runs in the stub process. when android is about to launch the stub activity,
-// put the real clone activity in its place.
+// hook used to swap a stub declared in the manifest for the real screen of the clone,
+// right before android creates it. runs in the stub process.
 public class LaunchHook {
 
-    private static final String TAG = "illclone";
+    private static final String TAG = "popclone";
 
     public static void install() throws Exception {
         Class<?> threadClass = Class.forName("android.app.ActivityThread");

@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.app.Activity;
 import android.app.Service;

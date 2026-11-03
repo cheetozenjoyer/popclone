@@ -1,4 +1,4 @@
-package dev.illclone;
+package dev.popclone;
 
 import android.app.Application;
 import android.app.Instrumentation;
@@ -49,6 +49,6 @@ public class Bootstrap {
         App.mark("providers installed");
         Instrumentation instrumentation = (Instrumentation) Reflect.field(threadClass, "mInstrumentation").get(thread);
         instrumentation.callApplicationOnCreate(app);
-        Log.i("illclone", "started " + info.packageName + " with " + providers.size() + " providers");
+        Log.i("popclone", "started " + info.packageName + " with " + providers.size() + " providers");
     }
 }
