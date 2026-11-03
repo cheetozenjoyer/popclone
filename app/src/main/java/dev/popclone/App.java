@@ -30,6 +30,15 @@ public class App extends Application {
         int slot = Instances.currentSlot();
         if (slot >= 0) {
             DeviceInfo.current = DeviceInfo.load(base, slot);
+            // never fall back to the real ids, make new ones if the saved ones are gone
+            if (DeviceInfo.current == null) {
+                DeviceInfo.current = DeviceInfo.generate();
+                try {
+                    DeviceInfo.current.save(base, slot);
+                } catch (Exception e) {
+                    Log.w("popclone", "cant save device ids: " + e);
+                }
+            }
             DeviceHook.applyBuild();
 
             // webview allows one process per data folder, so every clone gets its own.
