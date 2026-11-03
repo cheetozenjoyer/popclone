@@ -11,5 +11,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "illclone"
+rootProject.name = "popclone"
 include ":app"
