@@ -26,20 +26,31 @@ public class Installer {
         File dir = dir(ctx, pkg);
         if (new File(dir, "base.apk").exists()) return; // already copied for an earlier clone
 
+        // copy into a temp folder and rename at the end, so a failed copy never looks installed
         ApplicationInfo app = ctx.getPackageManager().getApplicationInfo(pkg, 0);
-        File lib = new File(dir, "lib");
+        File tmp = new File(dir.getPath() + ".tmp");
+        deleteAll(tmp);
+        File lib = new File(tmp, "lib");
         lib.mkdirs();
-
-        // start clean so old splits dont linger
-        File[] old = dir.listFiles((d, name) -> name.endsWith(".apk"));
-        if (old != null) for (File f : old) f.delete();
-
-        copyApk(app.sourceDir, new File(dir, "base.apk"), lib);
-        if (app.splitSourceDirs != null) {
-            for (String split : app.splitSourceDirs) {
-                copyApk(split, new File(dir, new File(split).getName()), lib);
+        try {
+            copyApk(app.sourceDir, new File(tmp, "base.apk"), lib);
+            if (app.splitSourceDirs != null) {
+                for (String split : app.splitSourceDirs) {
+                    copyApk(split, new File(tmp, new File(split).getName()), lib);
+                }
             }
+            deleteAll(dir);
+            if (!tmp.renameTo(dir)) throw new IOException("cant move the copy into place");
+        } catch (Exception e) {
+            deleteAll(tmp);
+            throw e;
         }
+    }
+
+    private static void deleteAll(File file) {
+        File[] children = java.nio.file.Files.isSymbolicLink(file.toPath()) ? null : file.listFiles();
+        if (children != null) for (File child : children) deleteAll(child);
+        file.delete();
     }
 
     // the apk must be read only or android refuses to load code from it
