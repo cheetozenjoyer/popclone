@@ -1,6 +1,5 @@
 name: build apk
 
-# run it by hand: github, actions tab, build apk, run workflow
 on:
   workflow_dispatch:
     inputs:
