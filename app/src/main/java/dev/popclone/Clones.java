@@ -57,7 +57,9 @@ public class Clones {
         List<ProviderInfo> mine = new ArrayList<>();
         if (info.providers != null) {
             for (ProviderInfo p : info.providers) {
-                if (!mainProcess.equals(p.processName)) continue;
+                // some roms leave the process name empty, that means the package name
+                String process = p.processName != null ? p.processName : p.packageName;
+                if (!mainProcess.equals(process)) continue;
                 p.applicationInfo = app;
                 p.processName = app.processName;
                 mine.add(p);
@@ -124,7 +126,7 @@ public class Clones {
         File data = new File(home, "data");
         data.mkdirs();
         ApplicationInfo app = info.applicationInfo;
-        String originalProcess = app.processName;
+        String originalProcess = app.processName != null ? app.processName : app.packageName;
         app.sourceDir = apk;
         app.publicSourceDir = apk;
         app.nativeLibraryDir = new File(dir, "lib").getPath();
