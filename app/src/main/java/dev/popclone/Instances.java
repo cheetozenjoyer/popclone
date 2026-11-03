@@ -8,6 +8,7 @@ import android.os.Process;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,11 @@ public class Instances {
             if (!file(ctx).exists()) return items;
             for (String line : Files.readAllLines(file(ctx).toPath())) {
                 String[] p = line.split("\t", -1);
-                if (p.length == 4) items.add(new Item(Integer.parseInt(p[0]), p[1], p[2], p[3]));
+                try {
+                    // a bad line is skipped, it must not make us drop the good ones on the next save
+                    if (p.length == 4) items.add(new Item(Integer.parseInt(p[0]), p[1], p[2], p[3]));
+                } catch (NumberFormatException ignored) {
+                }
             }
         } catch (Exception ignored) {
         }
@@ -66,7 +71,8 @@ public class Instances {
         List<Item> items = all(ctx);
         for (int slot = 0; slot < MAX; slot++) {
             if (find(ctx, slot) != null) continue;
-            Item item = new Item(slot, pkg, name, launcher);
+            // the label comes from another app, keep tabs and newlines out of our file format
+            Item item = new Item(slot, pkg, name.replaceAll("[\\t\\r\\n]", " "), launcher);
             items.add(item);
             save(ctx, items);
             return item;
@@ -142,8 +148,9 @@ public class Instances {
         }
     }
 
+    // a clone could leave a symlink in its folder, remove the link and never walk through it
     private static void deleteAll(File file) {
-        File[] children = file.listFiles();
+        File[] children = Files.isSymbolicLink(file.toPath()) ? null : file.listFiles();
         if (children != null) {
             for (File child : children) deleteAll(child);
         }
@@ -153,8 +160,11 @@ public class Instances {
     private static void save(Context ctx, List<Item> items) {
         List<String> lines = new ArrayList<>();
         for (Item i : items) lines.add(i.slot + "\t" + i.pkg + "\t" + i.name + "\t" + i.launcher);
+        // write a temp file and rename it, a crash halfway must not wipe the list
         try {
-            Files.write(file(ctx).toPath(), lines);
+            File tmp = new File(file(ctx).getPath() + ".tmp");
+            Files.write(tmp.toPath(), lines);
+            Files.move(tmp.toPath(), file(ctx).toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception ignored) {
         }
     }
