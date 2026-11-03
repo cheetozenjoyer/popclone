@@ -24,12 +24,20 @@ jobs:
       - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
 
       - name: build popclone
-        run: ./gradlew :app:assembleDebug
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          POPCLONE_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          POPCLONE_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          POPCLONE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/popclone.jks"
+          POPCLONE_KEYSTORE="$RUNNER_TEMP/popclone.jks" ./gradlew :app:assembleRelease
+          rm -f "$RUNNER_TEMP/popclone.jks"
 
       - name: name the apk
         env:
           TAG: ${{ github.ref_name }}
-        run: cp app/build/outputs/apk/debug/app-debug.apk "popclone-$TAG.apk"
+        run: cp app/build/outputs/apk/release/app-release.apk "popclone-$TAG.apk"
 
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
         with:
