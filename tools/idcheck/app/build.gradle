@@ -1,0 +1,22 @@
+plugins {
+    id 'com.android.application'
+}
+
+// tiny app that shows the device ids it can see. clone it to check the spoofing.
+android {
+    namespace 'dev.idcheck'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'dev.idcheck'
+        minSdk 26
+        targetSdk 30
+        versionCode 1
+        versionName '1'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

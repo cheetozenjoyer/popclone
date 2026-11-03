@@ -1,0 +1,7 @@
+*.apk
+*.dex
+*.so
+jx/
+build/
+.gradle/
+local.properties

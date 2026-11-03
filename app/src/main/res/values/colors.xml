@@ -1,0 +1,4 @@
+<resources>
+    <!-- soft blue behind the icon sticker -->
+    <color name="ic_launcher_background">#A9B8FF</color>
+</resources>
