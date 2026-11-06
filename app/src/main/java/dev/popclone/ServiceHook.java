@@ -39,6 +39,7 @@ public class ServiceHook {
             {"vibrator", "android.os.IVibratorService"},
             {"netstats", "android.net.INetworkStatsService"},
             {"usagestats", "android.app.usage.IUsageStatsManager"},
+            {"appwidget", "com.android.internal.appwidget.IAppWidgetService"},
     };
 
     public static void install() throws Exception {
