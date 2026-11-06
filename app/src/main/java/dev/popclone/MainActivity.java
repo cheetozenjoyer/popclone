@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -64,7 +65,12 @@ public class MainActivity extends Activity {
         clones = Instances.all(this);
         List<String> names = new ArrayList<>();
         for (Instances.Item item : clones) names.add(item.name);
+        // keep the scroll position, setting a new adapter would jump to the top
+        int first = list.getFirstVisiblePosition();
+        View row = list.getChildAt(0);
+        int offset = row == null ? 0 : row.getTop();
         list.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names));
+        list.setSelectionFromTop(first, offset);
     }
 
     // closes the other clones first, then the hook sees the component belongs to a clone
