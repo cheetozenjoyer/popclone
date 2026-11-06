@@ -1,5 +1,6 @@
 package dev.popclone;
 
+import android.content.ComponentName;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
@@ -112,13 +113,27 @@ public class ServiceHook {
         return Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, (p, method, args) -> {
             Object fake = DeviceHook.fakeAnswer(method.getName());
             if (fake != null) return fake;
-            if (args != null) ActivityHook.useHostPackage(args);
+            if (args != null) {
+                ActivityHook.useHostPackage(args);
+                useHostComponent(args);
+            }
             try {
                 return DeviceHook.fixResult(method.getName(), method.invoke(real, args));
             } catch (InvocationTargetException e) {
                 throw e.getCause();
             }
         });
+    }
+
+    // some calls (widgets) take a ComponentName and check its package too, keep the class and swap the package
+    private static void useHostComponent(Object[] args) {
+        for (int i = 0; i < args.length; i++) {
+            if (!(args[i] instanceof ComponentName)) continue;
+            ComponentName c = (ComponentName) args[i];
+            if (Clones.isCloned(App.host, c.getPackageName())) {
+                args[i] = new ComponentName(App.host.getPackageName(), c.getClassName());
+            }
+        }
     }
 
     // passes everything to the real binder except queryLocalInterface
