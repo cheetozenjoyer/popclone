@@ -37,6 +37,16 @@ jobs:
           name: popclone-debug
           path: popclone-debug.apk
 
+      - name: build waydroid only popclone
+        run: |
+          ./gradlew :app:assembleDebug -Pbridge
+          cp app/build/outputs/apk/debug/app-debug.apk popclone-waydroid-only-debug.apk
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: popclone-waydroid-only-debug
+          path: popclone-waydroid-only-debug.apk
+
       - name: build idcheck
         if: ${{ inputs.idcheck }}
         run: |

@@ -31,16 +31,24 @@ jobs:
           POPCLONE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/popclone.jks"
-          POPCLONE_KEYSTORE="$RUNNER_TEMP/popclone.jks" ./gradlew :app:assembleRelease
+          export POPCLONE_KEYSTORE="$RUNNER_TEMP/popclone.jks"
+          ./gradlew :app:assembleRelease
+          cp app/build/outputs/apk/release/app-release.apk popclone.apk
+          ./gradlew :app:assembleRelease -Pbridge
+          cp app/build/outputs/apk/release/app-release.apk popclone-waydroid-only.apk
           rm -f "$RUNNER_TEMP/popclone.jks"
 
       - name: name the apk
         env:
           TAG: ${{ github.ref_name }}
-        run: cp app/build/outputs/apk/release/app-release.apk "popclone-$TAG.apk"
+        run: |
+          mv popclone.apk "popclone-$TAG.apk"
+          mv popclone-waydroid-only.apk "popclone-$TAG-waydroid-only.apk"
 
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
         with:
-          files: popclone-${{ github.ref_name }}.apk
+          files: |
+            popclone-${{ github.ref_name }}.apk
+            popclone-${{ github.ref_name }}-waydroid-only.apk
           prerelease: ${{ startsWith(github.ref_name, 'v0.') }}
           generate_release_notes: true
