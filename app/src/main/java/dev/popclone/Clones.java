@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Process;
 import android.util.Log;
 
@@ -33,6 +34,15 @@ public class Clones {
         if (info == null || info.activities == null) return null;
         for (ActivityInfo a : info.activities) {
             if (a.name.equals(name.getClassName())) return a;
+        }
+        return null;
+    }
+
+    public static ServiceInfo serviceInfo(Context ctx, ComponentName name) {
+        PackageInfo info = packageInfo(ctx, name.getPackageName());
+        if (info == null || info.services == null) return null;
+        for (ServiceInfo s : info.services) {
+            if (s.name.equals(name.getClassName())) return s;
         }
         return null;
     }
@@ -115,7 +125,7 @@ public class Clones {
 
         File dir = Installer.dir(ctx, pkg);
         String apk = new File(dir, "base.apk").getPath();
-        info = ctx.getPackageManager().getPackageArchiveInfo(apk, PackageManager.GET_ACTIVITIES | PackageManager.GET_PROVIDERS);
+        info = ctx.getPackageManager().getPackageArchiveInfo(apk, PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_PROVIDERS);
         if (info == null) return null;
 
         // each clone has its own data. the main app has no slot and never runs a clone.
@@ -151,6 +161,12 @@ public class Clones {
             for (ActivityInfo a : info.activities) {
                 a.applicationInfo = app;
                 a.processName = app.processName;
+            }
+        }
+        if (info.services != null) {
+            for (ServiceInfo sv : info.services) {
+                sv.applicationInfo = app;
+                sv.processName = app.processName;
             }
         }
         info.providers = ownProviders(info, app, originalProcess);

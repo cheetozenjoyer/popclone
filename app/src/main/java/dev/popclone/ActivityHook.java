@@ -3,6 +3,8 @@ package dev.popclone;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +44,9 @@ public class ActivityHook {
             if (args != null) {
                 if (method.getName().startsWith("bind") && isBlockedBind(args)) return 0;
                 if (method.getName().equals("startActivity")) rewrite(args);
+                if (method.getName().equals("startService") || method.getName().startsWith("bind")) rewriteService(args);
+                Object handled = handleService(method, args);
+                if (handled != ServiceHost.NONE) return handled;
                 useHostPackage(args);
             }
             Object result = call(real, method, args);
@@ -126,6 +131,68 @@ public class ActivityHook {
             Log.w(TAG, "cant fix attribution source: " + e);
             return source;
         }
+    }
+
+    // service calls aimed at a clone go to its stub service, and a few calls the clone's own services
+    // make back to the system are answered here. NONE means nothing was done.
+    private static Object handleService(Method method, Object[] args) {
+        String name = method.getName();
+        if (name.equals("stopService")) {
+            for (Object a : args) {
+                if (!(a instanceof Intent)) continue;
+                Intent stub = toServiceStub(App.host, (Intent) a);
+                if (stub == null) return ServiceHost.NONE;
+                // stopping happens inside the stub process
+                App.host.startService(stub.putExtra(ServiceHost.STOP, true));
+                return 1;
+            }
+            return ServiceHost.NONE;
+        }
+        Object result = ServiceHost.intercept(name, args);
+        if (result == null && method.getReturnType() == boolean.class) return false;
+        return result;
+    }
+
+    private static void rewriteService(Object[] args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Intent) {
+                Intent stub = toServiceStub(App.host, (Intent) args[i]);
+                if (stub != null) args[i] = stub;
+                return;
+            }
+        }
+    }
+
+    // the slot that runs this package: our own when a clone calls itself, else the first clone of it
+    private static int serviceSlot(Context host, String pkg) {
+        Instances.Item own = Instances.find(host, Instances.currentSlot());
+        if (own != null && own.pkg.equals(pkg)) return own.slot;
+        for (Instances.Item item : Instances.all(host)) {
+            if (item.pkg.equals(pkg)) return item.slot;
+        }
+        return -1;
+    }
+
+    // null means leave the intent alone
+    private static Intent toServiceStub(Context host, Intent real) {
+        ComponentName target = real.getComponent();
+        if (target == null && real.getPackage() != null) {
+            ResolveInfo found = host.getPackageManager().resolveService(real, 0);
+            if (found != null) target = new ComponentName(found.serviceInfo.packageName, found.serviceInfo.name);
+        }
+        if (target == null || !Clones.isCloned(host, target.getPackageName())) return null;
+
+        int slot = serviceSlot(host, target.getPackageName());
+        if (slot < 0) return null;
+
+        Intent inner = new Intent(real).setComponent(target);
+        Intent stub = new Intent();
+        stub.setComponent(new ComponentName(host.getPackageName(), "dev.popclone.Stubs$S" + slot));
+        // android hands the same binder to intents that differ only in extras, so the real service goes in the data
+        stub.setData(Uri.fromParts("popclone", target.flattenToShortString() + "/" + real.getAction(), null));
+        stub.putExtra(KEY, inner);
+        Log.i(TAG, "service " + target.flattenToShortString() + " in stub " + slot);
+        return stub;
     }
 
     private static void rewrite(Object[] args) {
