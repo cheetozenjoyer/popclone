@@ -3,6 +3,7 @@ package dev.popclone;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -45,12 +46,15 @@ public class ActivityHook {
                 if (method.getName().startsWith("bind") && isBlockedBind(args)) return 0;
                 if (method.getName().equals("startActivity")) rewrite(args);
                 if (method.getName().equals("startService") || method.getName().startsWith("bind")) rewriteService(args);
+                if (method.getName().equals("getContentProvider")) rerouteProvider(args);
+                if (method.getName().startsWith("broadcastIntent")) fixBroadcastUser(args);
                 Object handled = handleService(method, args);
                 if (handled != ServiceHost.NONE) return handled;
                 useHostPackage(args);
             }
             Object result = call(real, method, args);
             if (method.getName().equals("getContentProvider") && result != null) wrapProvider(result);
+            if (method.getName().equals("checkPermission") && args != null) result = grantCloneAccess(args, result);
             return result;
         });
         Field instance = Reflect.field(singletonClass, "mInstance");
@@ -65,6 +69,8 @@ public class ActivityHook {
     };
 
     private static boolean isBlockedBind(Object[] args) {
+        // with play services cloned the bind goes to the clone, nothing to block
+        if (Instances.hasPackage(App.host, "com.google.android.gms")) return false;
         for (Object a : args) {
             if (!(a instanceof Intent)) continue;
             String action = ((Intent) a).getAction();
@@ -131,6 +137,36 @@ public class ActivityHook {
             Log.w(TAG, "cant fix attribution source: " + e);
             return source;
         }
+    }
+
+    // a provider that belongs to another clone is asked for through that clone's stub provider.
+    // the clone's own provider is found in this process without asking android.
+    private static void rerouteProvider(Object[] args) {
+        if (Boolean.TRUE.equals(StubProvider.forwarding.get())) return;
+        // getContentProvider(caller, callingPackage, authority, userId, stable)
+        if (args.length < 3 || !(args[2] instanceof String)) return;
+        String owner = Clones.ownerOfAuthority(App.host, (String) args[2]);
+        if (owner == null) return;
+        int slot = serviceSlot(App.host, owner);
+        if (slot < 0 || slot == Instances.currentSlot()) return;
+        args[2] = App.host.getPackageName() + ".stub.p" + slot;
+    }
+
+    // play services sends broadcasts to all users, that takes a permission only the system has.
+    // the user is the last int of the call, -1 means all users.
+    private static void fixBroadcastUser(Object[] args) {
+        for (int i = args.length - 1; i >= 0; i--) {
+            if (!(args[i] instanceof Integer)) continue;
+            if ((Integer) args[i] == -1) args[i] = android.os.Process.myUid() / 100000;
+            return;
+        }
+    }
+
+    // the clones are one app to us, so a permission a cloned package defines (gservices) is granted
+    private static Object grantCloneAccess(Object[] args, Object result) {
+        if (!(result instanceof Integer) || (Integer) result == PackageManager.PERMISSION_GRANTED) return result;
+        if (args[0] instanceof String && Clones.declaresPermission(App.host, (String) args[0])) return PackageManager.PERMISSION_GRANTED;
+        return result;
     }
 
     // service calls aimed at a clone go to its stub service, and a few calls the clone's own services
@@ -213,17 +249,27 @@ public class ActivityHook {
         if (slot < 0) slot = Instances.currentSlot();
 
         Instances.Item item = Instances.find(host, slot);
-        if (item == null || !item.pkg.equals(pkg)) return -1;
-        return slot;
+        if (item != null && item.pkg.equals(pkg)) return slot;
+        // a helper (play services) has no screen of its own, so any clone can reach its screens
+        for (Instances.Item other : Instances.all(host)) {
+            if (other.pkg.equals(pkg) && other.launcher.isEmpty()) return other.slot;
+        }
+        return -1;
     }
 
     // null means leave the intent alone
     private static Intent toStub(Context host, Intent real) {
         ComponentName target = real.getComponent();
+        // an intent that names an action and the cloned package (google sign in) gets its screen looked up
+        if (target == null && real.getPackage() != null && Clones.isCloned(host, real.getPackage())) {
+            ResolveInfo found = host.getPackageManager().resolveActivity(real, 0);
+            if (found != null) target = new ComponentName(found.activityInfo.packageName, found.activityInfo.name);
+        }
         if (target == null || !Clones.isCloned(host, target.getPackageName())) return null;
 
         int slot = slotFor(host, real, target.getPackageName());
         if (slot < 0) return null;
+        if (real.getComponent() == null) real = new Intent(real).setComponent(target);
 
         Intent stub = new Intent();
         stub.setComponent(new ComponentName(host.getPackageName(), "dev.popclone.Stubs$A" + slot));

@@ -75,6 +75,10 @@ public class MainActivity extends Activity {
 
     // the hook sees the component belongs to a clone and sends it to that clone's stub
     private void launch(Instances.Item item) {
+        if (item.launcher.isEmpty()) {
+            toast("this one has no screen, it runs when a clone needs it");
+            return;
+        }
         Intent intent = new Intent().setComponent(new ComponentName(item.pkg, item.launcher))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(ActivityHook.EXTRA_SLOT, item.slot);
@@ -90,6 +94,8 @@ public class MainActivity extends Activity {
 
         List<String> labels = new ArrayList<>();
         List<ResolveInfo> apps = new ArrayList<>();
+        labels.add("Google Play services (for google sign in)");
+        apps.add(null);
         for (ResolveInfo info : found) {
             if (info.activityInfo.packageName.equals(getPackageName())) continue;
             labels.add(info.loadLabel(pm).toString());
@@ -98,7 +104,10 @@ public class MainActivity extends Activity {
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle("clone which app?")
-                .setItems(labels.toArray(new String[0]), (dialog, which) -> create(apps.get(which), labels.get(which)))
+                .setItems(labels.toArray(new String[0]), (dialog, which) -> {
+                    if (apps.get(which) == null) addGoogle();
+                    else create(apps.get(which), labels.get(which));
+                })
                 .show();
     }
 
@@ -116,6 +125,30 @@ public class MainActivity extends Activity {
                     if (item == null) toast("no free slot");
                     else launch(item);
                 });
+            } catch (Exception e) {
+                runOnUiThread(() -> toast("failed: " + e.getMessage()));
+            }
+        }).start();
+    }
+
+    // play services and its helpers run as clones with no screen, other clones talk to them
+    private void addGoogle() {
+        Toast.makeText(this, "cloning google services", Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            String[][] packages = {{"com.google.android.gms", "Google Play services"}, {"com.google.android.gsf", "Google services framework"}};
+            try {
+                for (String[] p : packages) {
+                    if (Instances.hasPackage(this, p[0])) continue;
+                    try {
+                        getPackageManager().getApplicationInfo(p[0], 0);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        continue;
+                    }
+                    Installer.install(this, p[0]);
+                    Instances.Item item = Instances.create(this, p[0], p[1], "");
+                    if (item != null) DeviceInfo.generate().save(this, item.slot);
+                }
+                runOnUiThread(this::refresh);
             } catch (Exception e) {
                 runOnUiThread(() -> toast("failed: " + e.getMessage()));
             }

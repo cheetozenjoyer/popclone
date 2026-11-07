@@ -108,6 +108,7 @@ public class App extends Application {
             ActivityHook.install();
             LaunchHook.install();
             ServiceHook.install();
+            if (slot >= 0) PackageHook.install();
         } catch (Exception e) {
             Log.e("popclone", "hook failed", e);
         }

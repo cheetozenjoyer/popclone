@@ -1,10 +1,6 @@
 package dev.popclone;
 
 import android.app.Activity;
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
 
 // android rules dictate that an app can only open screens declared in its own manifest.
 // so we generate 120 stub screens, and each one gets swapped for a real app (a clone) at launch.
@@ -14,14 +10,7 @@ public class Stubs {
 
     public static class BaseService extends StubService { }
 
-    public static class BaseProvider extends ContentProvider {
-        @Override public boolean onCreate() { return true; }
-        @Override public Cursor query(Uri u, String[] p, String s, String[] a, String o) { return null; }
-        @Override public String getType(Uri u) { return null; }
-        @Override public Uri insert(Uri u, ContentValues v) { return null; }
-        @Override public int delete(Uri u, String s, String[] a) { return 0; }
-        @Override public int update(Uri u, ContentValues v, String s, String[] a) { return 0; }
-    }
+    public static class BaseProvider extends StubProvider { }
 
     public static class A0 extends Activity { }
     public static class S0 extends BaseService { }

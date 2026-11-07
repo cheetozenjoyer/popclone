@@ -65,6 +65,13 @@ public class Instances {
         return null;
     }
 
+    public static boolean hasPackage(Context ctx, String pkg) {
+        for (Item item : all(ctx)) {
+            if (item.pkg.equals(pkg)) return true;
+        }
+        return false;
+    }
+
     // gives the clone the first free slot, null when all are used
     public static synchronized Item create(Context ctx, String pkg, String name, String launcher) {
         List<Item> items = all(ctx);

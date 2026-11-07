@@ -111,6 +111,8 @@ public class ServiceHook {
 
     private static Object hostPackageProxy(Class<?> iface, Object real) {
         return Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, (p, method, args) -> {
+            // a system only question (gsf asks it), a clone has no parent profile
+            if (method.getName().equals("getProfileParent")) return null;
             Object fake = DeviceHook.fakeAnswer(method.getName());
             if (fake != null) return fake;
             if (args != null) {

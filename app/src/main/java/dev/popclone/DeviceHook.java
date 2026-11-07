@@ -53,6 +53,15 @@ public class DeviceHook {
     public static Bundle fakeSetting(Object[] args) {
         DeviceInfo d = DeviceInfo.current;
         if (d == null) return null;
+        // writes to settings need a system permission, a clone just thinks they worked
+        boolean settings = false;
+        boolean put = false;
+        for (Object a : args) {
+            if ("settings".equals(a)) settings = true;
+            if (a instanceof String && ((String) a).startsWith("PUT_")) put = true;
+        }
+        if (settings && put) return new Bundle();
+
         boolean secure = false;
         boolean androidId = false;
         for (Object a : args) {

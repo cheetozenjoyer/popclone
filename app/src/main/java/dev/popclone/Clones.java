@@ -38,6 +38,59 @@ public class Clones {
         return null;
     }
 
+    public static ApplicationInfo appInfo(Context ctx, String pkg) {
+        PackageInfo info = packageInfo(ctx, pkg);
+        return info == null ? null : info.applicationInfo;
+    }
+
+    // authority -> package and the permissions declared by the cloned packages. read from the apk files
+    // without touching packageInfo's cache, rescanned when the clone list may have changed.
+    private static final Map<String, String> authorityOwners = new HashMap<>();
+    private static final java.util.Set<String> declared = new java.util.HashSet<>();
+    private static long scannedAt;
+
+    private static synchronized void scan(Context ctx) {
+        if (System.currentTimeMillis() - scannedAt < 2000) return;
+        scannedAt = System.currentTimeMillis();
+        for (Instances.Item item : Instances.all(ctx)) {
+            if (authorityOwners.containsValue(item.pkg)) continue;
+            String apk = new File(Installer.dir(ctx, item.pkg), "base.apk").getPath();
+            PackageInfo info = ctx.getPackageManager().getPackageArchiveInfo(apk, PackageManager.GET_PROVIDERS | PackageManager.GET_PERMISSIONS);
+            if (info == null) continue;
+            if (info.providers != null) {
+                for (ProviderInfo p : info.providers) {
+                    if (p.authority == null) continue;
+                    for (String a : p.authority.split(";")) authorityOwners.put(a, item.pkg);
+                }
+            }
+            if (info.permissions != null) {
+                for (android.content.pm.PermissionInfo perm : info.permissions) declared.add(perm.name);
+            }
+        }
+    }
+
+    public static synchronized String ownerOfAuthority(Context ctx, String authority) {
+        scan(ctx);
+        return authorityOwners.get(authority);
+    }
+
+    // every authority of a cloned package, joined with ;
+    public static synchronized String authoritiesOf(Context ctx, String pkg) {
+        scan(ctx);
+        StringBuilder out = new StringBuilder();
+        for (Map.Entry<String, String> e : authorityOwners.entrySet()) {
+            if (!e.getValue().equals(pkg)) continue;
+            if (out.length() > 0) out.append(';');
+            out.append(e.getKey());
+        }
+        return out.toString();
+    }
+
+    public static synchronized boolean declaresPermission(Context ctx, String permission) {
+        scan(ctx);
+        return declared.contains(permission);
+    }
+
     public static ServiceInfo serviceInfo(Context ctx, ComponentName name) {
         PackageInfo info = packageInfo(ctx, name.getPackageName());
         if (info == null || info.services == null) return null;
@@ -69,7 +122,7 @@ public class Clones {
             for (ProviderInfo p : info.providers) {
                 // some roms leave the process name empty, that means the package name
                 String process = p.processName != null ? p.processName : p.packageName;
-                if (!mainProcess.equals(process)) continue;
+                if (mainProcess != null && !mainProcess.equals(process)) continue;
                 p.applicationInfo = app;
                 p.processName = app.processName;
                 mine.add(p);
@@ -91,7 +144,13 @@ public class Clones {
             app.publicSourceDir = original.publicSourceDir;
             app.splitSourceDirs = original.splitSourceDirs;
             app.splitPublicSourceDirs = original.splitPublicSourceDirs;
+            // system libraries the app asked for (org.apache.http.legacy)
+            app.sharedLibraryFiles = original.sharedLibraryFiles;
             setField(app, "splitNames", pm.getPackageInfo(pkg, 0).splitNames);
+            // feature splits (play services) need to know which split depends on which
+            for (String field : new String[]{"splitDependencies", "splitClassLoaderNames", "splitFlags"}) {
+                setField(app, field, Reflect.field(ApplicationInfo.class, field).get(original));
+            }
             Log.i("popclone", "using installed apk for " + pkg);
         } catch (Exception e) {
             // not installed, keep our copy
@@ -169,7 +228,10 @@ public class Clones {
                 sv.processName = app.processName;
             }
         }
-        info.providers = ownProviders(info, app, originalProcess);
+        Instances.Item me = Instances.find(ctx, slot);
+        // a helper (play services) has providers for many processes, they all live in this one
+        boolean helper = me != null && me.launcher.isEmpty();
+        info.providers = ownProviders(info, app, helper ? null : originalProcess);
         cache.put(pkg, info);
         return info;
     }
