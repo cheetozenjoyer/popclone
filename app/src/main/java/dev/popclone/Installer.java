@@ -73,7 +73,10 @@ public class Installer {
                     ZipEntry e = all.nextElement();
                     if (!e.getName().startsWith("lib/" + abi + "/") || !e.getName().endsWith(".so")) continue;
                     found = true;
-                    File out = new File(libDir, new File(e.getName()).getName());
+                    // same folder names android uses (lib/arm64), the arm translator looks at the path
+                    File abiDir = new File(libDir, folder(abi));
+                    abiDir.mkdirs();
+                    File out = new File(abiDir, new File(e.getName()).getName());
                     try (InputStream in = zip.getInputStream(e); FileOutputStream os = new FileOutputStream(out)) {
                         copy(in, os);
                     }
@@ -81,6 +84,20 @@ public class Installer {
                 if (found) return;
             }
         }
+    }
+
+    public static String folder(String abi) {
+        switch (abi) {
+            case "arm64-v8a": return "arm64";
+            case "armeabi-v7a": return "arm";
+            default: return abi;
+        }
+    }
+
+    // the one abi folder inside lib/, null when the app has no native code
+    public static File libDir(File dir) {
+        File[] abis = new File(dir, "lib").listFiles(File::isDirectory);
+        return abis == null || abis.length == 0 ? null : abis[0];
     }
 
     private static void copy(InputStream in, FileOutputStream out) throws IOException {

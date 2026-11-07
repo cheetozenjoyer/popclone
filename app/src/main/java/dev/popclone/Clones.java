@@ -129,7 +129,8 @@ public class Clones {
         String originalProcess = app.processName != null ? app.processName : app.packageName;
         app.sourceDir = apk;
         app.publicSourceDir = apk;
-        app.nativeLibraryDir = new File(dir, "lib").getPath();
+        File libs = Installer.libDir(dir);
+        app.nativeLibraryDir = (libs != null ? libs : new File(dir, "lib")).getPath();
         // android 15 gives flags 0 for an apk file. without HAS_CODE the app gets an empty classloader.
         app.flags |= ApplicationInfo.FLAG_HAS_CODE;
         app.splitSourceDirs = splits(dir);
