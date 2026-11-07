@@ -1,6 +1,7 @@
 package dev.popclone;
 
 import android.content.ComponentName;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
@@ -36,17 +37,32 @@ public class ServiceHook {
             {"clipboard", "android.content.IClipboard"},
             {"audio", "android.media.IAudioService"},
             {"jobscheduler", "android.app.job.IJobScheduler"},
-            {"account", "android.accounts.IAccountManager"},
             {"vibrator", "android.os.IVibratorService"},
             {"netstats", "android.net.INetworkStatsService"},
             {"usagestats", "android.app.usage.IUsageStatsManager"},
             {"appwidget", "com.android.internal.appwidget.IAppWidgetService"},
             {"content", "android.content.IContentService"},
+            {"device_policy", "android.app.admin.IDevicePolicyManager"},
+            {"biometric", "android.hardware.biometrics.IBiometricService"},
+            {"fingerprint", "android.hardware.fingerprint.IFingerprintService"},
+            {"auth", "android.hardware.biometrics.IAuthService"},
     };
 
     public static void install() throws Exception {
         // the notification manager keeps its service in a static field, replace that directly
         hookNotification();
+        if (Instances.currentSlot() >= 0) {
+            try {
+                hookMissing("statsmanager", "android.os.IStatsManagerService");
+            } catch (Throwable t) {
+                Log.w("popclone", "skipped stats: " + t);
+            }
+            try {
+                hookAccount();
+            } catch (Throwable t) {
+                Log.w("popclone", "skipped accounts: " + t);
+            }
+        }
         try {
             hookInputMethod();
         } catch (Throwable th) {
@@ -60,6 +76,31 @@ public class ServiceHook {
                 Log.w("popclone", "skipped service " + service[0] + ": " + t);
             }
         }
+    }
+
+    // a system service ordinary apps cannot reach comes back null and play services crashes on it.
+    // a stand in that answers every call with nothing keeps it going.
+    private static void hookMissing(String name, String ifaceName) throws Exception {
+        Class<?> serviceManager = Class.forName("android.os.ServiceManager");
+        if (serviceManager.getDeclaredMethod("getService", String.class).invoke(null, name) != null) return;
+        Class<?> iface = Class.forName(ifaceName);
+        Object nothing = Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, (p, method, args) -> {
+            Class<?> type = method.getReturnType();
+            return type == boolean.class ? (Object) false : type == int.class ? (Object) 0 : type == long.class ? (Object) 0L : null;
+        });
+        Map<String, IBinder> cache = (Map<String, IBinder>) Reflect.field(serviceManager, "sCache").get(null);
+        cache.put(name, new FakeBinder(new Binder(), (IInterface) nothing, ifaceName));
+    }
+
+    // clones get accounts of their own, kept in popclone, the phone's account list stays as it is
+    private static void hookAccount() throws Exception {
+        Class<?> serviceManager = Class.forName("android.os.ServiceManager");
+        IBinder real = (IBinder) serviceManager.getDeclaredMethod("getService", String.class).invoke(null, "account");
+        if (real == null || real instanceof FakeBinder) return;
+        String ifaceName = "android.accounts.IAccountManager";
+        IBinder fake = new FakeBinder(real, (IInterface) AccountHook.proxy(Class.forName(ifaceName)), ifaceName);
+        Map<String, IBinder> cache = (Map<String, IBinder>) Reflect.field(serviceManager, "sCache").get(null);
+        cache.put("account", fake);
     }
 
     private static void hookNotification() throws Exception {
@@ -127,6 +168,11 @@ public class ServiceHook {
             try {
                 return DeviceHook.fixResult(method.getName(), method.invoke(real, args));
             } catch (InvocationTargetException e) {
+                // these two are asked system only questions by play services, "no" is the right answer for a clone
+                if (e.getCause() instanceof SecurityException && (iface.getName().endsWith("IDevicePolicyManager") || iface.getName().endsWith("IUserManager"))) {
+                    Class<?> type = method.getReturnType();
+                    return type == boolean.class ? (Object) false : type == int.class ? (Object) 0 : type == long.class ? (Object) 0L : null;
+                }
                 throw e.getCause();
             }
         });

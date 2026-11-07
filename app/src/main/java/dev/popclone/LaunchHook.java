@@ -76,6 +76,8 @@ public class LaunchHook {
             if (real == null) continue;
 
             App.mark("launch seen");
+            String caller = stub.getStringExtra(ActivityHook.CALLER);
+            if (caller != null) ActivityHook.callers.put(Reflect.field(transaction.getClass(), "mActivityToken").get(transaction), caller);
             ActivityInfo info = Clones.activityInfo(App.host, real.getComponent());
             App.mark("package info ready");
             if (info == null) {

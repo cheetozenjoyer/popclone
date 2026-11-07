@@ -14,6 +14,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 // hook used to swap a clone's real screen for a stub declared in the manifest.
 // the real intent rides along in an extra, LaunchHook swaps it back.
@@ -21,6 +23,10 @@ public class ActivityHook {
 
     public static final String KEY = "popclone.target";
     public static final String EXTRA_SLOT = "popclone.slot";
+    // the clone that started a screen, sent along so the screen can be told who called it
+    public static final String CALLER = "popclone.caller";
+    // activity token -> package of the clone that started it
+    static final Map<Object, String> callers = new ConcurrentHashMap<>();
     private static final String TAG = "popclone";
 
     public static void install() throws Exception {
@@ -48,6 +54,7 @@ public class ActivityHook {
                 if (method.getName().equals("startService") || method.getName().startsWith("bind")) rewriteService(args);
                 if (method.getName().equals("getContentProvider")) rerouteProvider(args);
                 if (method.getName().startsWith("broadcastIntent")) fixBroadcastUser(args);
+                if (method.getName().startsWith("getIntentSender")) rewriteIntentSender(args);
                 Object handled = handleService(method, args);
                 if (handled != ServiceHost.NONE) return handled;
                 useHostPackage(args);
@@ -55,6 +62,13 @@ public class ActivityHook {
             Object result = call(real, method, args);
             if (method.getName().equals("getContentProvider") && result != null) wrapProvider(result);
             if (method.getName().equals("checkPermission") && args != null) result = grantCloneAccess(args, result);
+            // android says the caller of a screen is us, the screen wants the clone that really called
+            if (method.getName().startsWith("getCalling") && args != null && args.length > 0 && callers.containsKey(args[0])) {
+                String caller = callers.get(args[0]);
+                if (result instanceof String) result = caller;
+                else if (result instanceof ComponentName) result = new ComponentName(caller, ((ComponentName) result).getClassName());
+                Log.i(TAG, method.getName() + " answered with " + caller);
+            }
             return result;
         });
         Field instance = Reflect.field(singletonClass, "mInstance");
@@ -152,6 +166,24 @@ public class ActivityHook {
         args[2] = App.host.getPackageName() + ".stub.p" + slot;
     }
 
+    // a PendingIntent made by a clone points at the real app's screen or service. it gets the same
+    // stub treatment as a direct launch, or the system would open the real app when it fires.
+    // types: 2 activity, 4 service, 5 foreground service
+    private static void rewriteIntentSender(Object[] args) {
+        if (!(args[0] instanceof Integer)) return;
+        int type = (Integer) args[0];
+        if (type != 2 && type != 4 && type != 5) return;
+        for (Object a : args) {
+            if (!(a instanceof Intent[])) continue;
+            Intent[] intents = (Intent[]) a;
+            for (int i = 0; i < intents.length; i++) {
+                Intent stub = type == 2 ? toStub(App.host, intents[i]) : toServiceStub(App.host, intents[i]);
+                if (stub != null) intents[i] = stub;
+            }
+            return;
+        }
+    }
+
     // play services sends broadcasts to all users, that takes a permission only the system has.
     // the user is the last int of the call, -1 means all users.
     private static void fixBroadcastUser(Object[] args) {
@@ -166,6 +198,10 @@ public class ActivityHook {
     private static Object grantCloneAccess(Object[] args, Object result) {
         if (!(result instanceof Integer) || (Integer) result == PackageManager.PERMISSION_GRANTED) return result;
         if (args[0] instanceof String && Clones.declaresPermission(App.host, (String) args[0])) return PackageManager.PERMISSION_GRANTED;
+        // our account stand in plays the system's account service, authenticators only answer to that
+        if ("android.permission.ACCOUNT_MANAGER".equals(args[0]) && args.length > 2 && args[2] instanceof Integer && (Integer) args[2] == android.os.Process.myUid()) {
+            return PackageManager.PERMISSION_GRANTED;
+        }
         return result;
     }
 
@@ -275,6 +311,8 @@ public class ActivityHook {
         stub.setComponent(new ComponentName(host.getPackageName(), "dev.popclone.Stubs$A" + slot));
         stub.setFlags(real.getFlags());
         stub.putExtra(KEY, real);
+        Instances.Item me = Instances.find(host, Instances.currentSlot());
+        if (me != null) stub.putExtra(CALLER, me.pkg);
         Log.i(TAG, "start " + target.flattenToShortString() + " in stub " + slot);
         return stub;
     }
