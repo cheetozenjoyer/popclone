@@ -1,7 +1,11 @@
 package dev.idcheck;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -18,6 +22,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // start and bind our own service, PingService logs what happens
+        startService(new Intent(this, PingService.class).putExtra("who", "start"));
+        bindService(new Intent(this, PingService.class), new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder binder) {
+                Log.i("idping", "connected " + name.flattenToShortString() + " " + ((PingService.Local) binder).hello());
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.i("idping", "disconnected");
+            }
+        }, Context.BIND_AUTO_CREATE);
 
         TextView text = new TextView(this);
         text.setTextSize(16);
