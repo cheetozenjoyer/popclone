@@ -2,7 +2,6 @@ package dev.popclone;
 
 import android.app.ActivityManager;
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
 import android.os.Process;
 
@@ -91,43 +90,6 @@ public class Instances {
         killProcess(ctx, slot);
         deleteAll(dir(ctx, slot));
         remove(ctx, slot);
-    }
-
-    // only one clone runs at a time. closes every other clone and waits until it is really gone,
-    // so the new one never meets a leftover process (webview locks its folder, for one).
-    // call this off the main thread.
-    public static void stopOthers(Context ctx, int keepSlot) {
-        ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
-        String stubPrefix = ctx.getPackageName() + ".Stubs$A";
-        for (ActivityManager.AppTask task : am.getAppTasks()) {
-            ComponentName root = task.getTaskInfo().baseIntent.getComponent();
-            if (root != null && root.getClassName().startsWith(stubPrefix)
-                    && !root.getClassName().equals(stubPrefix + keepSlot)) {
-                task.finishAndRemoveTask();
-            }
-        }
-
-        for (int slot = 0; slot < MAX; slot++) {
-            if (slot != keepSlot) killProcess(ctx, slot);
-        }
-
-        // wait up to 3 seconds for them to disappear
-        for (int i = 0; i < 30 && othersRunning(ctx, keepSlot); i++) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                return;
-            }
-        }
-    }
-
-    private static boolean othersRunning(Context ctx, int keepSlot) {
-        ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
-            int slot = slotOf(ctx, p.processName);
-            if (slot >= 0 && slot != keepSlot) return true;
-        }
-        return false;
     }
 
     private static void killProcess(Context ctx, int slot) {

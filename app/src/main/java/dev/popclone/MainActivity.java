@@ -73,16 +73,12 @@ public class MainActivity extends Activity {
         list.setSelectionFromTop(first, offset);
     }
 
-    // closes the other clones first, then the hook sees the component belongs to a clone
-    // and sends it to that clone's stub
+    // the hook sees the component belongs to a clone and sends it to that clone's stub
     private void launch(Instances.Item item) {
-        new Thread(() -> {
-            Instances.stopOthers(this, item.slot);
-            Intent intent = new Intent().setComponent(new ComponentName(item.pkg, item.launcher))
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(ActivityHook.EXTRA_SLOT, item.slot);
-            runOnUiThread(() -> startActivity(intent));
-        }).start();
+        Intent intent = new Intent().setComponent(new ComponentName(item.pkg, item.launcher))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(ActivityHook.EXTRA_SLOT, item.slot);
+        startActivity(intent);
     }
 
     // list the installed apps that have a launcher icon
