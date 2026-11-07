@@ -22,6 +22,9 @@ public class PackageHook {
 
         Class<?> iface = Class.forName("android.content.pm.IPackageManager");
         Object proxy = Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, (p, method, args) -> {
+            // only the real app may switch its own components on and off, a clone just thinks it did
+            if (method.getName().equals("setComponentEnabledSetting") && args[0] instanceof android.content.ComponentName
+                    && isClone(((android.content.ComponentName) args[0]).getPackageName())) return null;
             Object result;
             try {
                 result = method.invoke(real, args);

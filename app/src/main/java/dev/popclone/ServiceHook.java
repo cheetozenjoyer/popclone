@@ -41,6 +41,7 @@ public class ServiceHook {
             {"netstats", "android.net.INetworkStatsService"},
             {"usagestats", "android.app.usage.IUsageStatsManager"},
             {"appwidget", "com.android.internal.appwidget.IAppWidgetService"},
+            {"content", "android.content.IContentService"},
     };
 
     public static void install() throws Exception {
@@ -113,6 +114,10 @@ public class ServiceHook {
         return Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, (p, method, args) -> {
             // a system only question (gsf asks it), a clone has no parent profile
             if (method.getName().equals("getProfileParent")) return null;
+            // watching a provider of another clone is refused by android (it opens it for the clone's uid),
+            // nothing is lost, the other clone's provider lives in another process anyway
+            if (method.getName().equals("registerContentObserver") && args[0] instanceof android.net.Uri
+                    && Clones.ownerOfAuthority(App.host, ((android.net.Uri) args[0]).getAuthority()) != null) return null;
             Object fake = DeviceHook.fakeAnswer(method.getName());
             if (fake != null) return fake;
             if (args != null) {
