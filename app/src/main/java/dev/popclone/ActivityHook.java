@@ -52,9 +52,12 @@ public class ActivityHook {
         instance.set(singleton, proxy);
     }
 
-    // google analytics inside a clone fails the uid check in play services and kills the app.
-    // saying "cant bind" makes it give up quietly.
-    private static final String[] BLOCKED_BIND_ACTIONS = {"com.google.android.gms.measurement.START"};
+    // google analytics and the ads signals client fail the uid check in play services and kill the app.
+    // saying "cant bind" makes them give up quietly.
+    private static final String[] BLOCKED_BIND_ACTIONS = {
+            "com.google.android.gms.measurement.START",
+            "com.google.android.gms.gass.START",
+    };
 
     private static boolean isBlockedBind(Object[] args) {
         for (Object a : args) {

@@ -19,6 +19,19 @@ public class App extends Application {
         Log.i("popclone", "t+" + (SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime()) + "ms " + what);
     }
 
+    // play services refuses a clone's package name and the ads sdk does not catch it on its own threads.
+    // only that exact error is dropped, the thread ends and the app keeps running.
+    private static void survivePlayServicesRefusal() {
+        Thread.UncaughtExceptionHandler old = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+            if (error instanceof SecurityException && String.valueOf(error.getMessage()).startsWith("Unknown calling package name")) {
+                Log.w("popclone", "ignored play services refusal in " + thread.getName());
+            } else if (old != null) {
+                old.uncaughtException(thread, error);
+            }
+        });
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -49,6 +62,8 @@ public class App extends Application {
                 Log.w("popclone", "webview suffix failed: " + e);
             }
         }
+
+        if (slot >= 0) survivePlayServicesRefusal();
 
         try {
             ActivityHook.install();
