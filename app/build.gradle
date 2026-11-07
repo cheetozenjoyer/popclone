@@ -44,6 +44,23 @@ android {
     }
 }
 
+// -Pbridge makes the apk arm64 only so an x86 host (waydroid) runs it through its arm translator.
+// the file is never loaded, android just picks the process abi from the folder it sits in.
+if (project.hasProperty('bridge')) {
+    def stubDir = layout.buildDirectory.dir('bridge/jniLibs/arm64-v8a')
+    def makeStub = tasks.register('makeBridgeStub') {
+        outputs.dir(stubDir)
+        doLast {
+            def dir = stubDir.get().asFile
+            dir.mkdirs()
+            new File(dir, 'libbridge.so').text = 'stub'
+        }
+    }
+    android.sourceSets.main.jniLibs.srcDir(layout.buildDirectory.dir('bridge/jniLibs'))
+    android.packagingOptions.jniLibs.keepDebugSymbols.add('**/*.so')
+    tasks.matching { it.name == 'preBuild' }.configureEach { dependsOn makeStub }
+}
+
 dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
