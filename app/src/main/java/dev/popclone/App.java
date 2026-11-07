@@ -19,17 +19,56 @@ public class App extends Application {
         Log.i("popclone", "t+" + (SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime()) + "ms " + what);
     }
 
-    // play services refuses a clone's package name and the ads sdk does not catch it on its own threads.
-    // only that exact error is dropped, the thread ends and the app keeps running.
-    private static void survivePlayServicesRefusal() {
-        Thread.UncaughtExceptionHandler old = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
-            if (error instanceof SecurityException && String.valueOf(error.getMessage()).startsWith("Unknown calling package name")) {
-                Log.w("popclone", "ignored play services refusal in " + thread.getName());
-            } else if (old != null) {
-                old.uncaughtException(thread, error);
+    // play services refuses a clone's package name, so its ad code fails on its own threads and nobody catches it.
+    // errors from that refusal or thrown inside play services code are dropped, the app keeps running.
+    private static class Survivor implements Thread.UncaughtExceptionHandler {
+        private final Thread.UncaughtExceptionHandler next;
+
+        Survivor(Thread.UncaughtExceptionHandler next) {
+            this.next = next;
+        }
+
+        @Override
+        public void uncaughtException(Thread thread, Throwable error) {
+            if (fromPlayServices(error)) {
+                Log.w("popclone", "ignored play services error in " + thread.getName() + ": " + error);
+            } else if (next != null) {
+                next.uncaughtException(thread, error);
             }
-        });
+        }
+    }
+
+    private static boolean fromPlayServices(Throwable error) {
+        for (Throwable t = error; t != null; t = t.getCause()) {
+            if (t instanceof SecurityException && String.valueOf(t.getMessage()).startsWith("Unknown calling package name")) return true;
+            StackTraceElement[] trace = t.getStackTrace();
+            if (trace.length > 0 && (trace[0].getClassName().startsWith("com.google.android.gms")
+                    || String.valueOf(trace[0].getFileName()).contains("com.google.android.gms"))) return true;
+        }
+        return false;
+    }
+
+    // ad sdks (applovin and friends) set their own handler that kills the process, so
+    // keep ours on top by putting it back whenever something replaces it
+    private static void survivePlayServicesRefusal() {
+        wrapHandler();
+        Thread keeper = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    return;
+                }
+                wrapHandler();
+            }
+        }, "popclone-handler");
+        keeper.setDaemon(true);
+        keeper.start();
+    }
+
+    private static void wrapHandler() {
+        Thread.UncaughtExceptionHandler current = Thread.getDefaultUncaughtExceptionHandler();
+        if (!(current instanceof Survivor)) Thread.setDefaultUncaughtExceptionHandler(new Survivor(current));
     }
 
     @Override
