@@ -55,7 +55,7 @@ for i in range(COUNT):
         <service android:name=".Stubs$S{i}" android:process=":p{i}" android:exported="false" />
         <provider
             android:name=".Stubs$P{i}"
-            android:authorities="dev.popclone.stub.p{i}"
+            android:authorities="${{applicationId}}.stub.p{i}"
             android:process=":p{i}"
             android:exported="false" />
 '''

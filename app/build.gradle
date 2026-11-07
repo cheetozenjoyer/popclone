@@ -7,7 +7,9 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId 'dev.popclone'
+        // -PappId=dev.popclone.dev installs a second copy next to the real one for testing
+        applicationId project.findProperty('appId') ?: 'dev.popclone'
+        manifestPlaceholders = [appLabel: project.hasProperty('appId') ? 'popclone dev' : 'popclone']
         minSdk 26
         targetSdk 30
         versionCode 3

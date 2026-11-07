@@ -28,7 +28,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
-        android:label="popclone"
+        android:label="${appLabel}"
         android:theme="@style/Theme.Popclone">
         <activity
             android:name=".MainActivity"
@@ -48,7 +48,7 @@
         <service android:name=".Stubs$S0" android:process=":p0" android:exported="false" />
         <provider
             android:name=".Stubs$P0"
-            android:authorities="dev.popclone.stub.p0"
+            android:authorities="${applicationId}.stub.p0"
             android:process=":p0"
             android:exported="false" />
         <activity
@@ -59,7 +59,7 @@
         <service android:name=".Stubs$S1" android:process=":p1" android:exported="false" />
         <provider
             android:name=".Stubs$P1"
-            android:authorities="dev.popclone.stub.p1"
+            android:authorities="${applicationId}.stub.p1"
             android:process=":p1"
             android:exported="false" />
         <activity
@@ -70,7 +70,7 @@
         <service android:name=".Stubs$S2" android:process=":p2" android:exported="false" />
         <provider
             android:name=".Stubs$P2"
-            android:authorities="dev.popclone.stub.p2"
+            android:authorities="${applicationId}.stub.p2"
             android:process=":p2"
             android:exported="false" />
         <activity
@@ -81,7 +81,7 @@
         <service android:name=".Stubs$S3" android:process=":p3" android:exported="false" />
         <provider
             android:name=".Stubs$P3"
-            android:authorities="dev.popclone.stub.p3"
+            android:authorities="${applicationId}.stub.p3"
             android:process=":p3"
             android:exported="false" />
         <activity
@@ -92,7 +92,7 @@
         <service android:name=".Stubs$S4" android:process=":p4" android:exported="false" />
         <provider
             android:name=".Stubs$P4"
-            android:authorities="dev.popclone.stub.p4"
+            android:authorities="${applicationId}.stub.p4"
             android:process=":p4"
             android:exported="false" />
         <activity
@@ -103,7 +103,7 @@
         <service android:name=".Stubs$S5" android:process=":p5" android:exported="false" />
         <provider
             android:name=".Stubs$P5"
-            android:authorities="dev.popclone.stub.p5"
+            android:authorities="${applicationId}.stub.p5"
             android:process=":p5"
             android:exported="false" />
         <activity
@@ -114,7 +114,7 @@
         <service android:name=".Stubs$S6" android:process=":p6" android:exported="false" />
         <provider
             android:name=".Stubs$P6"
-            android:authorities="dev.popclone.stub.p6"
+            android:authorities="${applicationId}.stub.p6"
             android:process=":p6"
             android:exported="false" />
         <activity
@@ -125,7 +125,7 @@
         <service android:name=".Stubs$S7" android:process=":p7" android:exported="false" />
         <provider
             android:name=".Stubs$P7"
-            android:authorities="dev.popclone.stub.p7"
+            android:authorities="${applicationId}.stub.p7"
             android:process=":p7"
             android:exported="false" />
         <activity
@@ -136,7 +136,7 @@
         <service android:name=".Stubs$S8" android:process=":p8" android:exported="false" />
         <provider
             android:name=".Stubs$P8"
-            android:authorities="dev.popclone.stub.p8"
+            android:authorities="${applicationId}.stub.p8"
             android:process=":p8"
             android:exported="false" />
         <activity
@@ -147,7 +147,7 @@
         <service android:name=".Stubs$S9" android:process=":p9" android:exported="false" />
         <provider
             android:name=".Stubs$P9"
-            android:authorities="dev.popclone.stub.p9"
+            android:authorities="${applicationId}.stub.p9"
             android:process=":p9"
             android:exported="false" />
         <activity
@@ -158,7 +158,7 @@
         <service android:name=".Stubs$S10" android:process=":p10" android:exported="false" />
         <provider
             android:name=".Stubs$P10"
-            android:authorities="dev.popclone.stub.p10"
+            android:authorities="${applicationId}.stub.p10"
             android:process=":p10"
             android:exported="false" />
         <activity
@@ -169,7 +169,7 @@
         <service android:name=".Stubs$S11" android:process=":p11" android:exported="false" />
         <provider
             android:name=".Stubs$P11"
-            android:authorities="dev.popclone.stub.p11"
+            android:authorities="${applicationId}.stub.p11"
             android:process=":p11"
             android:exported="false" />
         <activity
@@ -180,7 +180,7 @@
         <service android:name=".Stubs$S12" android:process=":p12" android:exported="false" />
         <provider
             android:name=".Stubs$P12"
-            android:authorities="dev.popclone.stub.p12"
+            android:authorities="${applicationId}.stub.p12"
             android:process=":p12"
             android:exported="false" />
         <activity
@@ -191,7 +191,7 @@
         <service android:name=".Stubs$S13" android:process=":p13" android:exported="false" />
         <provider
             android:name=".Stubs$P13"
-            android:authorities="dev.popclone.stub.p13"
+            android:authorities="${applicationId}.stub.p13"
             android:process=":p13"
             android:exported="false" />
         <activity
@@ -202,7 +202,7 @@
         <service android:name=".Stubs$S14" android:process=":p14" android:exported="false" />
         <provider
             android:name=".Stubs$P14"
-            android:authorities="dev.popclone.stub.p14"
+            android:authorities="${applicationId}.stub.p14"
             android:process=":p14"
             android:exported="false" />
         <activity
@@ -213,7 +213,7 @@
         <service android:name=".Stubs$S15" android:process=":p15" android:exported="false" />
         <provider
             android:name=".Stubs$P15"
-            android:authorities="dev.popclone.stub.p15"
+            android:authorities="${applicationId}.stub.p15"
             android:process=":p15"
             android:exported="false" />
         <activity
@@ -224,7 +224,7 @@
         <service android:name=".Stubs$S16" android:process=":p16" android:exported="false" />
         <provider
             android:name=".Stubs$P16"
-            android:authorities="dev.popclone.stub.p16"
+            android:authorities="${applicationId}.stub.p16"
             android:process=":p16"
             android:exported="false" />
         <activity
@@ -235,7 +235,7 @@
         <service android:name=".Stubs$S17" android:process=":p17" android:exported="false" />
         <provider
             android:name=".Stubs$P17"
-            android:authorities="dev.popclone.stub.p17"
+            android:authorities="${applicationId}.stub.p17"
             android:process=":p17"
             android:exported="false" />
         <activity
@@ -246,7 +246,7 @@
         <service android:name=".Stubs$S18" android:process=":p18" android:exported="false" />
         <provider
             android:name=".Stubs$P18"
-            android:authorities="dev.popclone.stub.p18"
+            android:authorities="${applicationId}.stub.p18"
             android:process=":p18"
             android:exported="false" />
         <activity
@@ -257,7 +257,7 @@
         <service android:name=".Stubs$S19" android:process=":p19" android:exported="false" />
         <provider
             android:name=".Stubs$P19"
-            android:authorities="dev.popclone.stub.p19"
+            android:authorities="${applicationId}.stub.p19"
             android:process=":p19"
             android:exported="false" />
         <activity
@@ -268,7 +268,7 @@
         <service android:name=".Stubs$S20" android:process=":p20" android:exported="false" />
         <provider
             android:name=".Stubs$P20"
-            android:authorities="dev.popclone.stub.p20"
+            android:authorities="${applicationId}.stub.p20"
             android:process=":p20"
             android:exported="false" />
         <activity
@@ -279,7 +279,7 @@
         <service android:name=".Stubs$S21" android:process=":p21" android:exported="false" />
         <provider
             android:name=".Stubs$P21"
-            android:authorities="dev.popclone.stub.p21"
+            android:authorities="${applicationId}.stub.p21"
             android:process=":p21"
             android:exported="false" />
         <activity
@@ -290,7 +290,7 @@
         <service android:name=".Stubs$S22" android:process=":p22" android:exported="false" />
         <provider
             android:name=".Stubs$P22"
-            android:authorities="dev.popclone.stub.p22"
+            android:authorities="${applicationId}.stub.p22"
             android:process=":p22"
             android:exported="false" />
         <activity
@@ -301,7 +301,7 @@
         <service android:name=".Stubs$S23" android:process=":p23" android:exported="false" />
         <provider
             android:name=".Stubs$P23"
-            android:authorities="dev.popclone.stub.p23"
+            android:authorities="${applicationId}.stub.p23"
             android:process=":p23"
             android:exported="false" />
         <activity
@@ -312,7 +312,7 @@
         <service android:name=".Stubs$S24" android:process=":p24" android:exported="false" />
         <provider
             android:name=".Stubs$P24"
-            android:authorities="dev.popclone.stub.p24"
+            android:authorities="${applicationId}.stub.p24"
             android:process=":p24"
             android:exported="false" />
         <activity
@@ -323,7 +323,7 @@
         <service android:name=".Stubs$S25" android:process=":p25" android:exported="false" />
         <provider
             android:name=".Stubs$P25"
-            android:authorities="dev.popclone.stub.p25"
+            android:authorities="${applicationId}.stub.p25"
             android:process=":p25"
             android:exported="false" />
         <activity
@@ -334,7 +334,7 @@
         <service android:name=".Stubs$S26" android:process=":p26" android:exported="false" />
         <provider
             android:name=".Stubs$P26"
-            android:authorities="dev.popclone.stub.p26"
+            android:authorities="${applicationId}.stub.p26"
             android:process=":p26"
             android:exported="false" />
         <activity
@@ -345,7 +345,7 @@
         <service android:name=".Stubs$S27" android:process=":p27" android:exported="false" />
         <provider
             android:name=".Stubs$P27"
-            android:authorities="dev.popclone.stub.p27"
+            android:authorities="${applicationId}.stub.p27"
             android:process=":p27"
             android:exported="false" />
         <activity
@@ -356,7 +356,7 @@
         <service android:name=".Stubs$S28" android:process=":p28" android:exported="false" />
         <provider
             android:name=".Stubs$P28"
-            android:authorities="dev.popclone.stub.p28"
+            android:authorities="${applicationId}.stub.p28"
             android:process=":p28"
             android:exported="false" />
         <activity
@@ -367,7 +367,7 @@
         <service android:name=".Stubs$S29" android:process=":p29" android:exported="false" />
         <provider
             android:name=".Stubs$P29"
-            android:authorities="dev.popclone.stub.p29"
+            android:authorities="${applicationId}.stub.p29"
             android:process=":p29"
             android:exported="false" />
         <activity
@@ -378,7 +378,7 @@
         <service android:name=".Stubs$S30" android:process=":p30" android:exported="false" />
         <provider
             android:name=".Stubs$P30"
-            android:authorities="dev.popclone.stub.p30"
+            android:authorities="${applicationId}.stub.p30"
             android:process=":p30"
             android:exported="false" />
         <activity
@@ -389,7 +389,7 @@
         <service android:name=".Stubs$S31" android:process=":p31" android:exported="false" />
         <provider
             android:name=".Stubs$P31"
-            android:authorities="dev.popclone.stub.p31"
+            android:authorities="${applicationId}.stub.p31"
             android:process=":p31"
             android:exported="false" />
         <activity
@@ -400,7 +400,7 @@
         <service android:name=".Stubs$S32" android:process=":p32" android:exported="false" />
         <provider
             android:name=".Stubs$P32"
-            android:authorities="dev.popclone.stub.p32"
+            android:authorities="${applicationId}.stub.p32"
             android:process=":p32"
             android:exported="false" />
         <activity
@@ -411,7 +411,7 @@
         <service android:name=".Stubs$S33" android:process=":p33" android:exported="false" />
         <provider
             android:name=".Stubs$P33"
-            android:authorities="dev.popclone.stub.p33"
+            android:authorities="${applicationId}.stub.p33"
             android:process=":p33"
             android:exported="false" />
         <activity
@@ -422,7 +422,7 @@
         <service android:name=".Stubs$S34" android:process=":p34" android:exported="false" />
         <provider
             android:name=".Stubs$P34"
-            android:authorities="dev.popclone.stub.p34"
+            android:authorities="${applicationId}.stub.p34"
             android:process=":p34"
             android:exported="false" />
         <activity
@@ -433,7 +433,7 @@
         <service android:name=".Stubs$S35" android:process=":p35" android:exported="false" />
         <provider
             android:name=".Stubs$P35"
-            android:authorities="dev.popclone.stub.p35"
+            android:authorities="${applicationId}.stub.p35"
             android:process=":p35"
             android:exported="false" />
         <activity
@@ -444,7 +444,7 @@
         <service android:name=".Stubs$S36" android:process=":p36" android:exported="false" />
         <provider
             android:name=".Stubs$P36"
-            android:authorities="dev.popclone.stub.p36"
+            android:authorities="${applicationId}.stub.p36"
             android:process=":p36"
             android:exported="false" />
         <activity
@@ -455,7 +455,7 @@
         <service android:name=".Stubs$S37" android:process=":p37" android:exported="false" />
         <provider
             android:name=".Stubs$P37"
-            android:authorities="dev.popclone.stub.p37"
+            android:authorities="${applicationId}.stub.p37"
             android:process=":p37"
             android:exported="false" />
         <activity
@@ -466,7 +466,7 @@
         <service android:name=".Stubs$S38" android:process=":p38" android:exported="false" />
         <provider
             android:name=".Stubs$P38"
-            android:authorities="dev.popclone.stub.p38"
+            android:authorities="${applicationId}.stub.p38"
             android:process=":p38"
             android:exported="false" />
         <activity
@@ -477,7 +477,7 @@
         <service android:name=".Stubs$S39" android:process=":p39" android:exported="false" />
         <provider
             android:name=".Stubs$P39"
-            android:authorities="dev.popclone.stub.p39"
+            android:authorities="${applicationId}.stub.p39"
             android:process=":p39"
             android:exported="false" />
         <activity
@@ -488,7 +488,7 @@
         <service android:name=".Stubs$S40" android:process=":p40" android:exported="false" />
         <provider
             android:name=".Stubs$P40"
-            android:authorities="dev.popclone.stub.p40"
+            android:authorities="${applicationId}.stub.p40"
             android:process=":p40"
             android:exported="false" />
         <activity
@@ -499,7 +499,7 @@
         <service android:name=".Stubs$S41" android:process=":p41" android:exported="false" />
         <provider
             android:name=".Stubs$P41"
-            android:authorities="dev.popclone.stub.p41"
+            android:authorities="${applicationId}.stub.p41"
             android:process=":p41"
             android:exported="false" />
         <activity
@@ -510,7 +510,7 @@
         <service android:name=".Stubs$S42" android:process=":p42" android:exported="false" />
         <provider
             android:name=".Stubs$P42"
-            android:authorities="dev.popclone.stub.p42"
+            android:authorities="${applicationId}.stub.p42"
             android:process=":p42"
             android:exported="false" />
         <activity
@@ -521,7 +521,7 @@
         <service android:name=".Stubs$S43" android:process=":p43" android:exported="false" />
         <provider
             android:name=".Stubs$P43"
-            android:authorities="dev.popclone.stub.p43"
+            android:authorities="${applicationId}.stub.p43"
             android:process=":p43"
             android:exported="false" />
         <activity
@@ -532,7 +532,7 @@
         <service android:name=".Stubs$S44" android:process=":p44" android:exported="false" />
         <provider
             android:name=".Stubs$P44"
-            android:authorities="dev.popclone.stub.p44"
+            android:authorities="${applicationId}.stub.p44"
             android:process=":p44"
             android:exported="false" />
         <activity
@@ -543,7 +543,7 @@
         <service android:name=".Stubs$S45" android:process=":p45" android:exported="false" />
         <provider
             android:name=".Stubs$P45"
-            android:authorities="dev.popclone.stub.p45"
+            android:authorities="${applicationId}.stub.p45"
             android:process=":p45"
             android:exported="false" />
         <activity
@@ -554,7 +554,7 @@
         <service android:name=".Stubs$S46" android:process=":p46" android:exported="false" />
         <provider
             android:name=".Stubs$P46"
-            android:authorities="dev.popclone.stub.p46"
+            android:authorities="${applicationId}.stub.p46"
             android:process=":p46"
             android:exported="false" />
         <activity
@@ -565,7 +565,7 @@
         <service android:name=".Stubs$S47" android:process=":p47" android:exported="false" />
         <provider
             android:name=".Stubs$P47"
-            android:authorities="dev.popclone.stub.p47"
+            android:authorities="${applicationId}.stub.p47"
             android:process=":p47"
             android:exported="false" />
         <activity
@@ -576,7 +576,7 @@
         <service android:name=".Stubs$S48" android:process=":p48" android:exported="false" />
         <provider
             android:name=".Stubs$P48"
-            android:authorities="dev.popclone.stub.p48"
+            android:authorities="${applicationId}.stub.p48"
             android:process=":p48"
             android:exported="false" />
         <activity
@@ -587,7 +587,7 @@
         <service android:name=".Stubs$S49" android:process=":p49" android:exported="false" />
         <provider
             android:name=".Stubs$P49"
-            android:authorities="dev.popclone.stub.p49"
+            android:authorities="${applicationId}.stub.p49"
             android:process=":p49"
             android:exported="false" />
         <activity
@@ -598,7 +598,7 @@
         <service android:name=".Stubs$S50" android:process=":p50" android:exported="false" />
         <provider
             android:name=".Stubs$P50"
-            android:authorities="dev.popclone.stub.p50"
+            android:authorities="${applicationId}.stub.p50"
             android:process=":p50"
             android:exported="false" />
         <activity
@@ -609,7 +609,7 @@
         <service android:name=".Stubs$S51" android:process=":p51" android:exported="false" />
         <provider
             android:name=".Stubs$P51"
-            android:authorities="dev.popclone.stub.p51"
+            android:authorities="${applicationId}.stub.p51"
             android:process=":p51"
             android:exported="false" />
         <activity
@@ -620,7 +620,7 @@
         <service android:name=".Stubs$S52" android:process=":p52" android:exported="false" />
         <provider
             android:name=".Stubs$P52"
-            android:authorities="dev.popclone.stub.p52"
+            android:authorities="${applicationId}.stub.p52"
             android:process=":p52"
             android:exported="false" />
         <activity
@@ -631,7 +631,7 @@
         <service android:name=".Stubs$S53" android:process=":p53" android:exported="false" />
         <provider
             android:name=".Stubs$P53"
-            android:authorities="dev.popclone.stub.p53"
+            android:authorities="${applicationId}.stub.p53"
             android:process=":p53"
             android:exported="false" />
         <activity
@@ -642,7 +642,7 @@
         <service android:name=".Stubs$S54" android:process=":p54" android:exported="false" />
         <provider
             android:name=".Stubs$P54"
-            android:authorities="dev.popclone.stub.p54"
+            android:authorities="${applicationId}.stub.p54"
             android:process=":p54"
             android:exported="false" />
         <activity
@@ -653,7 +653,7 @@
         <service android:name=".Stubs$S55" android:process=":p55" android:exported="false" />
         <provider
             android:name=".Stubs$P55"
-            android:authorities="dev.popclone.stub.p55"
+            android:authorities="${applicationId}.stub.p55"
             android:process=":p55"
             android:exported="false" />
         <activity
@@ -664,7 +664,7 @@
         <service android:name=".Stubs$S56" android:process=":p56" android:exported="false" />
         <provider
             android:name=".Stubs$P56"
-            android:authorities="dev.popclone.stub.p56"
+            android:authorities="${applicationId}.stub.p56"
             android:process=":p56"
             android:exported="false" />
         <activity
@@ -675,7 +675,7 @@
         <service android:name=".Stubs$S57" android:process=":p57" android:exported="false" />
         <provider
             android:name=".Stubs$P57"
-            android:authorities="dev.popclone.stub.p57"
+            android:authorities="${applicationId}.stub.p57"
             android:process=":p57"
             android:exported="false" />
         <activity
@@ -686,7 +686,7 @@
         <service android:name=".Stubs$S58" android:process=":p58" android:exported="false" />
         <provider
             android:name=".Stubs$P58"
-            android:authorities="dev.popclone.stub.p58"
+            android:authorities="${applicationId}.stub.p58"
             android:process=":p58"
             android:exported="false" />
         <activity
@@ -697,7 +697,7 @@
         <service android:name=".Stubs$S59" android:process=":p59" android:exported="false" />
         <provider
             android:name=".Stubs$P59"
-            android:authorities="dev.popclone.stub.p59"
+            android:authorities="${applicationId}.stub.p59"
             android:process=":p59"
             android:exported="false" />
         <activity
@@ -708,7 +708,7 @@
         <service android:name=".Stubs$S60" android:process=":p60" android:exported="false" />
         <provider
             android:name=".Stubs$P60"
-            android:authorities="dev.popclone.stub.p60"
+            android:authorities="${applicationId}.stub.p60"
             android:process=":p60"
             android:exported="false" />
         <activity
@@ -719,7 +719,7 @@
         <service android:name=".Stubs$S61" android:process=":p61" android:exported="false" />
         <provider
             android:name=".Stubs$P61"
-            android:authorities="dev.popclone.stub.p61"
+            android:authorities="${applicationId}.stub.p61"
             android:process=":p61"
             android:exported="false" />
         <activity
@@ -730,7 +730,7 @@
         <service android:name=".Stubs$S62" android:process=":p62" android:exported="false" />
         <provider
             android:name=".Stubs$P62"
-            android:authorities="dev.popclone.stub.p62"
+            android:authorities="${applicationId}.stub.p62"
             android:process=":p62"
             android:exported="false" />
         <activity
@@ -741,7 +741,7 @@
         <service android:name=".Stubs$S63" android:process=":p63" android:exported="false" />
         <provider
             android:name=".Stubs$P63"
-            android:authorities="dev.popclone.stub.p63"
+            android:authorities="${applicationId}.stub.p63"
             android:process=":p63"
             android:exported="false" />
         <activity
@@ -752,7 +752,7 @@
         <service android:name=".Stubs$S64" android:process=":p64" android:exported="false" />
         <provider
             android:name=".Stubs$P64"
-            android:authorities="dev.popclone.stub.p64"
+            android:authorities="${applicationId}.stub.p64"
             android:process=":p64"
             android:exported="false" />
         <activity
@@ -763,7 +763,7 @@
         <service android:name=".Stubs$S65" android:process=":p65" android:exported="false" />
         <provider
             android:name=".Stubs$P65"
-            android:authorities="dev.popclone.stub.p65"
+            android:authorities="${applicationId}.stub.p65"
             android:process=":p65"
             android:exported="false" />
         <activity
@@ -774,7 +774,7 @@
         <service android:name=".Stubs$S66" android:process=":p66" android:exported="false" />
         <provider
             android:name=".Stubs$P66"
-            android:authorities="dev.popclone.stub.p66"
+            android:authorities="${applicationId}.stub.p66"
             android:process=":p66"
             android:exported="false" />
         <activity
@@ -785,7 +785,7 @@
         <service android:name=".Stubs$S67" android:process=":p67" android:exported="false" />
         <provider
             android:name=".Stubs$P67"
-            android:authorities="dev.popclone.stub.p67"
+            android:authorities="${applicationId}.stub.p67"
             android:process=":p67"
             android:exported="false" />
         <activity
@@ -796,7 +796,7 @@
         <service android:name=".Stubs$S68" android:process=":p68" android:exported="false" />
         <provider
             android:name=".Stubs$P68"
-            android:authorities="dev.popclone.stub.p68"
+            android:authorities="${applicationId}.stub.p68"
             android:process=":p68"
             android:exported="false" />
         <activity
@@ -807,7 +807,7 @@
         <service android:name=".Stubs$S69" android:process=":p69" android:exported="false" />
         <provider
             android:name=".Stubs$P69"
-            android:authorities="dev.popclone.stub.p69"
+            android:authorities="${applicationId}.stub.p69"
             android:process=":p69"
             android:exported="false" />
         <activity
@@ -818,7 +818,7 @@
         <service android:name=".Stubs$S70" android:process=":p70" android:exported="false" />
         <provider
             android:name=".Stubs$P70"
-            android:authorities="dev.popclone.stub.p70"
+            android:authorities="${applicationId}.stub.p70"
             android:process=":p70"
             android:exported="false" />
         <activity
@@ -829,7 +829,7 @@
         <service android:name=".Stubs$S71" android:process=":p71" android:exported="false" />
         <provider
             android:name=".Stubs$P71"
-            android:authorities="dev.popclone.stub.p71"
+            android:authorities="${applicationId}.stub.p71"
             android:process=":p71"
             android:exported="false" />
         <activity
@@ -840,7 +840,7 @@
         <service android:name=".Stubs$S72" android:process=":p72" android:exported="false" />
         <provider
             android:name=".Stubs$P72"
-            android:authorities="dev.popclone.stub.p72"
+            android:authorities="${applicationId}.stub.p72"
             android:process=":p72"
             android:exported="false" />
         <activity
@@ -851,7 +851,7 @@
         <service android:name=".Stubs$S73" android:process=":p73" android:exported="false" />
         <provider
             android:name=".Stubs$P73"
-            android:authorities="dev.popclone.stub.p73"
+            android:authorities="${applicationId}.stub.p73"
             android:process=":p73"
             android:exported="false" />
         <activity
@@ -862,7 +862,7 @@
         <service android:name=".Stubs$S74" android:process=":p74" android:exported="false" />
         <provider
             android:name=".Stubs$P74"
-            android:authorities="dev.popclone.stub.p74"
+            android:authorities="${applicationId}.stub.p74"
             android:process=":p74"
             android:exported="false" />
         <activity
@@ -873,7 +873,7 @@
         <service android:name=".Stubs$S75" android:process=":p75" android:exported="false" />
         <provider
             android:name=".Stubs$P75"
-            android:authorities="dev.popclone.stub.p75"
+            android:authorities="${applicationId}.stub.p75"
             android:process=":p75"
             android:exported="false" />
         <activity
@@ -884,7 +884,7 @@
         <service android:name=".Stubs$S76" android:process=":p76" android:exported="false" />
         <provider
             android:name=".Stubs$P76"
-            android:authorities="dev.popclone.stub.p76"
+            android:authorities="${applicationId}.stub.p76"
             android:process=":p76"
             android:exported="false" />
         <activity
@@ -895,7 +895,7 @@
         <service android:name=".Stubs$S77" android:process=":p77" android:exported="false" />
         <provider
             android:name=".Stubs$P77"
-            android:authorities="dev.popclone.stub.p77"
+            android:authorities="${applicationId}.stub.p77"
             android:process=":p77"
             android:exported="false" />
         <activity
@@ -906,7 +906,7 @@
         <service android:name=".Stubs$S78" android:process=":p78" android:exported="false" />
         <provider
             android:name=".Stubs$P78"
-            android:authorities="dev.popclone.stub.p78"
+            android:authorities="${applicationId}.stub.p78"
             android:process=":p78"
             android:exported="false" />
         <activity
@@ -917,7 +917,7 @@
         <service android:name=".Stubs$S79" android:process=":p79" android:exported="false" />
         <provider
             android:name=".Stubs$P79"
-            android:authorities="dev.popclone.stub.p79"
+            android:authorities="${applicationId}.stub.p79"
             android:process=":p79"
             android:exported="false" />
         <activity
@@ -928,7 +928,7 @@
         <service android:name=".Stubs$S80" android:process=":p80" android:exported="false" />
         <provider
             android:name=".Stubs$P80"
-            android:authorities="dev.popclone.stub.p80"
+            android:authorities="${applicationId}.stub.p80"
             android:process=":p80"
             android:exported="false" />
         <activity
@@ -939,7 +939,7 @@
         <service android:name=".Stubs$S81" android:process=":p81" android:exported="false" />
         <provider
             android:name=".Stubs$P81"
-            android:authorities="dev.popclone.stub.p81"
+            android:authorities="${applicationId}.stub.p81"
             android:process=":p81"
             android:exported="false" />
         <activity
@@ -950,7 +950,7 @@
         <service android:name=".Stubs$S82" android:process=":p82" android:exported="false" />
         <provider
             android:name=".Stubs$P82"
-            android:authorities="dev.popclone.stub.p82"
+            android:authorities="${applicationId}.stub.p82"
             android:process=":p82"
             android:exported="false" />
         <activity
@@ -961,7 +961,7 @@
         <service android:name=".Stubs$S83" android:process=":p83" android:exported="false" />
         <provider
             android:name=".Stubs$P83"
-            android:authorities="dev.popclone.stub.p83"
+            android:authorities="${applicationId}.stub.p83"
             android:process=":p83"
             android:exported="false" />
         <activity
@@ -972,7 +972,7 @@
         <service android:name=".Stubs$S84" android:process=":p84" android:exported="false" />
         <provider
             android:name=".Stubs$P84"
-            android:authorities="dev.popclone.stub.p84"
+            android:authorities="${applicationId}.stub.p84"
             android:process=":p84"
             android:exported="false" />
         <activity
@@ -983,7 +983,7 @@
         <service android:name=".Stubs$S85" android:process=":p85" android:exported="false" />
         <provider
             android:name=".Stubs$P85"
-            android:authorities="dev.popclone.stub.p85"
+            android:authorities="${applicationId}.stub.p85"
             android:process=":p85"
             android:exported="false" />
         <activity
@@ -994,7 +994,7 @@
         <service android:name=".Stubs$S86" android:process=":p86" android:exported="false" />
         <provider
             android:name=".Stubs$P86"
-            android:authorities="dev.popclone.stub.p86"
+            android:authorities="${applicationId}.stub.p86"
             android:process=":p86"
             android:exported="false" />
         <activity
@@ -1005,7 +1005,7 @@
         <service android:name=".Stubs$S87" android:process=":p87" android:exported="false" />
         <provider
             android:name=".Stubs$P87"
-            android:authorities="dev.popclone.stub.p87"
+            android:authorities="${applicationId}.stub.p87"
             android:process=":p87"
             android:exported="false" />
         <activity
@@ -1016,7 +1016,7 @@
         <service android:name=".Stubs$S88" android:process=":p88" android:exported="false" />
         <provider
             android:name=".Stubs$P88"
-            android:authorities="dev.popclone.stub.p88"
+            android:authorities="${applicationId}.stub.p88"
             android:process=":p88"
             android:exported="false" />
         <activity
@@ -1027,7 +1027,7 @@
         <service android:name=".Stubs$S89" android:process=":p89" android:exported="false" />
         <provider
             android:name=".Stubs$P89"
-            android:authorities="dev.popclone.stub.p89"
+            android:authorities="${applicationId}.stub.p89"
             android:process=":p89"
             android:exported="false" />
         <activity
@@ -1038,7 +1038,7 @@
         <service android:name=".Stubs$S90" android:process=":p90" android:exported="false" />
         <provider
             android:name=".Stubs$P90"
-            android:authorities="dev.popclone.stub.p90"
+            android:authorities="${applicationId}.stub.p90"
             android:process=":p90"
             android:exported="false" />
         <activity
@@ -1049,7 +1049,7 @@
         <service android:name=".Stubs$S91" android:process=":p91" android:exported="false" />
         <provider
             android:name=".Stubs$P91"
-            android:authorities="dev.popclone.stub.p91"
+            android:authorities="${applicationId}.stub.p91"
             android:process=":p91"
             android:exported="false" />
         <activity
@@ -1060,7 +1060,7 @@
         <service android:name=".Stubs$S92" android:process=":p92" android:exported="false" />
         <provider
             android:name=".Stubs$P92"
-            android:authorities="dev.popclone.stub.p92"
+            android:authorities="${applicationId}.stub.p92"
             android:process=":p92"
             android:exported="false" />
         <activity
@@ -1071,7 +1071,7 @@
         <service android:name=".Stubs$S93" android:process=":p93" android:exported="false" />
         <provider
             android:name=".Stubs$P93"
-            android:authorities="dev.popclone.stub.p93"
+            android:authorities="${applicationId}.stub.p93"
             android:process=":p93"
             android:exported="false" />
         <activity
@@ -1082,7 +1082,7 @@
         <service android:name=".Stubs$S94" android:process=":p94" android:exported="false" />
         <provider
             android:name=".Stubs$P94"
-            android:authorities="dev.popclone.stub.p94"
+            android:authorities="${applicationId}.stub.p94"
             android:process=":p94"
             android:exported="false" />
         <activity
@@ -1093,7 +1093,7 @@
         <service android:name=".Stubs$S95" android:process=":p95" android:exported="false" />
         <provider
             android:name=".Stubs$P95"
-            android:authorities="dev.popclone.stub.p95"
+            android:authorities="${applicationId}.stub.p95"
             android:process=":p95"
             android:exported="false" />
         <activity
@@ -1104,7 +1104,7 @@
         <service android:name=".Stubs$S96" android:process=":p96" android:exported="false" />
         <provider
             android:name=".Stubs$P96"
-            android:authorities="dev.popclone.stub.p96"
+            android:authorities="${applicationId}.stub.p96"
             android:process=":p96"
             android:exported="false" />
         <activity
@@ -1115,7 +1115,7 @@
         <service android:name=".Stubs$S97" android:process=":p97" android:exported="false" />
         <provider
             android:name=".Stubs$P97"
-            android:authorities="dev.popclone.stub.p97"
+            android:authorities="${applicationId}.stub.p97"
             android:process=":p97"
             android:exported="false" />
         <activity
@@ -1126,7 +1126,7 @@
         <service android:name=".Stubs$S98" android:process=":p98" android:exported="false" />
         <provider
             android:name=".Stubs$P98"
-            android:authorities="dev.popclone.stub.p98"
+            android:authorities="${applicationId}.stub.p98"
             android:process=":p98"
             android:exported="false" />
         <activity
@@ -1137,7 +1137,7 @@
         <service android:name=".Stubs$S99" android:process=":p99" android:exported="false" />
         <provider
             android:name=".Stubs$P99"
-            android:authorities="dev.popclone.stub.p99"
+            android:authorities="${applicationId}.stub.p99"
             android:process=":p99"
             android:exported="false" />
         <activity
@@ -1148,7 +1148,7 @@
         <service android:name=".Stubs$S100" android:process=":p100" android:exported="false" />
         <provider
             android:name=".Stubs$P100"
-            android:authorities="dev.popclone.stub.p100"
+            android:authorities="${applicationId}.stub.p100"
             android:process=":p100"
             android:exported="false" />
         <activity
@@ -1159,7 +1159,7 @@
         <service android:name=".Stubs$S101" android:process=":p101" android:exported="false" />
         <provider
             android:name=".Stubs$P101"
-            android:authorities="dev.popclone.stub.p101"
+            android:authorities="${applicationId}.stub.p101"
             android:process=":p101"
             android:exported="false" />
         <activity
@@ -1170,7 +1170,7 @@
         <service android:name=".Stubs$S102" android:process=":p102" android:exported="false" />
         <provider
             android:name=".Stubs$P102"
-            android:authorities="dev.popclone.stub.p102"
+            android:authorities="${applicationId}.stub.p102"
             android:process=":p102"
             android:exported="false" />
         <activity
@@ -1181,7 +1181,7 @@
         <service android:name=".Stubs$S103" android:process=":p103" android:exported="false" />
         <provider
             android:name=".Stubs$P103"
-            android:authorities="dev.popclone.stub.p103"
+            android:authorities="${applicationId}.stub.p103"
             android:process=":p103"
             android:exported="false" />
         <activity
@@ -1192,7 +1192,7 @@
         <service android:name=".Stubs$S104" android:process=":p104" android:exported="false" />
         <provider
             android:name=".Stubs$P104"
-            android:authorities="dev.popclone.stub.p104"
+            android:authorities="${applicationId}.stub.p104"
             android:process=":p104"
             android:exported="false" />
         <activity
@@ -1203,7 +1203,7 @@
         <service android:name=".Stubs$S105" android:process=":p105" android:exported="false" />
         <provider
             android:name=".Stubs$P105"
-            android:authorities="dev.popclone.stub.p105"
+            android:authorities="${applicationId}.stub.p105"
             android:process=":p105"
             android:exported="false" />
         <activity
@@ -1214,7 +1214,7 @@
         <service android:name=".Stubs$S106" android:process=":p106" android:exported="false" />
         <provider
             android:name=".Stubs$P106"
-            android:authorities="dev.popclone.stub.p106"
+            android:authorities="${applicationId}.stub.p106"
             android:process=":p106"
             android:exported="false" />
         <activity
@@ -1225,7 +1225,7 @@
         <service android:name=".Stubs$S107" android:process=":p107" android:exported="false" />
         <provider
             android:name=".Stubs$P107"
-            android:authorities="dev.popclone.stub.p107"
+            android:authorities="${applicationId}.stub.p107"
             android:process=":p107"
             android:exported="false" />
         <activity
@@ -1236,7 +1236,7 @@
         <service android:name=".Stubs$S108" android:process=":p108" android:exported="false" />
         <provider
             android:name=".Stubs$P108"
-            android:authorities="dev.popclone.stub.p108"
+            android:authorities="${applicationId}.stub.p108"
             android:process=":p108"
             android:exported="false" />
         <activity
@@ -1247,7 +1247,7 @@
         <service android:name=".Stubs$S109" android:process=":p109" android:exported="false" />
         <provider
             android:name=".Stubs$P109"
-            android:authorities="dev.popclone.stub.p109"
+            android:authorities="${applicationId}.stub.p109"
             android:process=":p109"
             android:exported="false" />
         <activity
@@ -1258,7 +1258,7 @@
         <service android:name=".Stubs$S110" android:process=":p110" android:exported="false" />
         <provider
             android:name=".Stubs$P110"
-            android:authorities="dev.popclone.stub.p110"
+            android:authorities="${applicationId}.stub.p110"
             android:process=":p110"
             android:exported="false" />
         <activity
@@ -1269,7 +1269,7 @@
         <service android:name=".Stubs$S111" android:process=":p111" android:exported="false" />
         <provider
             android:name=".Stubs$P111"
-            android:authorities="dev.popclone.stub.p111"
+            android:authorities="${applicationId}.stub.p111"
             android:process=":p111"
             android:exported="false" />
         <activity
@@ -1280,7 +1280,7 @@
         <service android:name=".Stubs$S112" android:process=":p112" android:exported="false" />
         <provider
             android:name=".Stubs$P112"
-            android:authorities="dev.popclone.stub.p112"
+            android:authorities="${applicationId}.stub.p112"
             android:process=":p112"
             android:exported="false" />
         <activity
@@ -1291,7 +1291,7 @@
         <service android:name=".Stubs$S113" android:process=":p113" android:exported="false" />
         <provider
             android:name=".Stubs$P113"
-            android:authorities="dev.popclone.stub.p113"
+            android:authorities="${applicationId}.stub.p113"
             android:process=":p113"
             android:exported="false" />
         <activity
@@ -1302,7 +1302,7 @@
         <service android:name=".Stubs$S114" android:process=":p114" android:exported="false" />
         <provider
             android:name=".Stubs$P114"
-            android:authorities="dev.popclone.stub.p114"
+            android:authorities="${applicationId}.stub.p114"
             android:process=":p114"
             android:exported="false" />
         <activity
@@ -1313,7 +1313,7 @@
         <service android:name=".Stubs$S115" android:process=":p115" android:exported="false" />
         <provider
             android:name=".Stubs$P115"
-            android:authorities="dev.popclone.stub.p115"
+            android:authorities="${applicationId}.stub.p115"
             android:process=":p115"
             android:exported="false" />
         <activity
@@ -1324,7 +1324,7 @@
         <service android:name=".Stubs$S116" android:process=":p116" android:exported="false" />
         <provider
             android:name=".Stubs$P116"
-            android:authorities="dev.popclone.stub.p116"
+            android:authorities="${applicationId}.stub.p116"
             android:process=":p116"
             android:exported="false" />
         <activity
@@ -1335,7 +1335,7 @@
         <service android:name=".Stubs$S117" android:process=":p117" android:exported="false" />
         <provider
             android:name=".Stubs$P117"
-            android:authorities="dev.popclone.stub.p117"
+            android:authorities="${applicationId}.stub.p117"
             android:process=":p117"
             android:exported="false" />
         <activity
@@ -1346,7 +1346,7 @@
         <service android:name=".Stubs$S118" android:process=":p118" android:exported="false" />
         <provider
             android:name=".Stubs$P118"
-            android:authorities="dev.popclone.stub.p118"
+            android:authorities="${applicationId}.stub.p118"
             android:process=":p118"
             android:exported="false" />
         <activity
@@ -1357,7 +1357,7 @@
         <service android:name=".Stubs$S119" android:process=":p119" android:exported="false" />
         <provider
             android:name=".Stubs$P119"
-            android:authorities="dev.popclone.stub.p119"
+            android:authorities="${applicationId}.stub.p119"
             android:process=":p119"
             android:exported="false" />
         <!-- stubs end -->
